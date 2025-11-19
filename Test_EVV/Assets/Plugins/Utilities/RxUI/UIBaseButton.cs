@@ -1,5 +1,7 @@
 ﻿namespace Utilities.RxUI
 {
+	#if UNIRX
+	
 	using System;
 	using Sirenix.OdinInspector;
 	using UniRx;
@@ -317,4 +319,6 @@
 				_disabledView.SetActive( !v );
 		}
 	}
+
+	#endif
 }

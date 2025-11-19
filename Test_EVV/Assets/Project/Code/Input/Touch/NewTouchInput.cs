@@ -1,19 +1,16 @@
 namespace Code.Input.Touch
 {
     using System.Collections;
-    using _Game._Scripts.Level;
-    using _Game._Scripts.Utilities.Extensions;
+    using Code.Core;
     using Cysharp.Threading.Tasks;
     using UniRx;
     using UnityEngine;
     using UnityEngine.InputSystem;
     using UnityEngine.InputSystem.EnhancedTouch;
-    using Zenject;
 
     public class NewTouchInput : ITouchInput, IInitializable
     {
-        [Inject] IInputManager _inputManager;
-        [Inject] CMCameraController _cameraController;
+        IInputManager _inputManager;
 
         bool _isTouching;
         bool _waitTouch;

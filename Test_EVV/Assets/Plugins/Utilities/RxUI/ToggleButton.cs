@@ -1,5 +1,7 @@
 ﻿namespace Utilities.RxUI
 {
+	#if UNIRX
+	
 	using System.Collections.Generic;
 	using UniRx;
 	using UnityEngine;
@@ -50,4 +52,6 @@
 			}
 		}
 	}
+
+	#endif
 }

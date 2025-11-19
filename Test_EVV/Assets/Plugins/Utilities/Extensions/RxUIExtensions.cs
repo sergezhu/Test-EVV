@@ -1,5 +1,7 @@
 ﻿namespace Utilities.Extensions
 {
+	#if UNIRX
+	
 	using System;
 	using UniRx;
 	using UnityEngine;
@@ -21,4 +23,6 @@
 				.AddTo( component );
 		}
 	}
+
+	#endif
 }

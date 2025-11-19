@@ -1,5 +1,7 @@
 ﻿namespace Utilities.RxUI
 {
+	#if UNIRX
+	
 	using UnityEngine;
 	using UnityEngine.UI;
 
@@ -15,4 +17,6 @@
 			_progressImage.fillAmount = value;
 		}
 	}
+
+	#endif
 }

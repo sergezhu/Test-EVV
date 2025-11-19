@@ -1,5 +1,7 @@
 ﻿namespace Utilities.RxUI
 {
+	#if UNIRX
+	
 	using System;
 	using System.Linq;
 	using Sirenix.OdinInspector;
@@ -108,4 +110,6 @@
 			}
 		}
 	}
+
+	#endif
 }

@@ -1,5 +1,7 @@
 ﻿namespace Utilities.RxUI
 {
+	#if UNIRX
+	
 	using Sirenix.OdinInspector;
 	using UnityEngine;
 	using UnityEngine.UI;
@@ -88,4 +90,6 @@
 			}
 		}
 	}
+
+	#endif
 }

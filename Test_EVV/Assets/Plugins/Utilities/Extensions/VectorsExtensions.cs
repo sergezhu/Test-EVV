@@ -2,9 +2,12 @@
 {
 	using System.Collections.Generic;
 	using System.Linq;
-	using Unity.Mathematics;
 	using UnityEngine;
 
+	#if MATH
+	using Unity.Mathematics;
+	#endif
+	
 	public static class VectorsExtensions
 	{
 		// Vector2 to Int
@@ -263,6 +266,8 @@
 
 		// float3
 
+		#if MATH
+
 		public static float3 Clamp( this float3 v, float3 from, float3 to )
 		{
 			var x = math.clamp( v.x, from.x, to.x );
@@ -286,6 +291,8 @@
 			var lerp = math.lerp( a, b, t );
 			return lerp.xxx;
 		}
+		
+		#endif
 
 		// Vectors Int substitutions
 
