@@ -1,5 +1,7 @@
 ﻿namespace Utilities.RxUI
 {
+	#if UNIRX
+	
 	using System;
 	using System.Collections.Generic;
 	using UniRx;
@@ -87,4 +89,6 @@
 			Click.Execute();
 		}
 	}
+
+	#endif
 }

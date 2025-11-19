@@ -1,5 +1,6 @@
 ﻿namespace Utilities.Extensions
 {
+    #if UNIRX
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -357,4 +358,6 @@
             return new ReactiveCollection<T>(source);
         }
     }
+
+    #endif
 }

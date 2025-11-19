@@ -1,5 +1,7 @@
 ﻿namespace Utilities.UI
 {
+	#if UNIRX
+	
 	using System.Collections;
 	using System.Linq;
 	using UniRx;
@@ -98,4 +100,6 @@
 			_adaptiveGroup.ActiveElement = child != null ? child.RectTransform : null;
 		}
 	}
+
+	#endif
 }

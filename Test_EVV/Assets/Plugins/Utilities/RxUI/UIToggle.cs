@@ -1,5 +1,7 @@
 ﻿namespace Utilities.RxUI
 {
+	#if UNIRX
+	
 	using System;
 	using UniRx;
 	using UnityEngine;
@@ -22,4 +24,6 @@
 		public void SetOn() => _toggle.SetIsOnWithoutNotify( true );
 		public void SetOff() => _toggle.SetIsOnWithoutNotify( false );
 	}
+
+	#endif
 }
