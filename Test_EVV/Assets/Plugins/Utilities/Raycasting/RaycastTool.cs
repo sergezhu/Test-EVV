@@ -4,15 +4,6 @@
 	using global::Utilities.Extensions;
 	using UnityEngine;
 
-	public struct TouchData
-	{
-		public Vector2 ScreenPosition;
-
-		public Vector3 CameraPosition;
-		public Vector3 WorldProjectionFromCamera;
-		public Vector3 WorldDirectionFromCamera;
-	}
-
 	// mask for example : var mask = (1 << Layers.MergeItem);
 	
 	public class RaycastTool
