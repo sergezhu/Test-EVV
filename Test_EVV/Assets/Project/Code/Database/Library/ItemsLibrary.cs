@@ -44,11 +44,7 @@
 
 			var info = new ItemFactoryInfo
 			{
-				Info = new ItemDbInfo
-				{
-					ID = dbItem.ID,
-					Name = dbItem.Name
-				},
+				Info = new ItemDbInfo(dbItem.ID, dbItem.Name),
 				ItemPrefab = dbItem.BoardItemPrefab
 			};
 
@@ -62,8 +58,7 @@
 
 		public IEnumerable<ItemDbInfo> GetAllItems()
 		{
-			return _databaseItems
-				.Select(item => new ItemDbInfo { ID = item.ID, Name = item.Name });
+			return _databaseItems.Select(item => new ItemDbInfo(item.ID, item.Name));
 		}
 
 		public DatabaseItem GetItem(uint id)

@@ -7,7 +7,6 @@
 
 	public class MergeItem : IDisposable
 	{
-		private readonly ItemDbInfo dbInfo;
 		private readonly IDatabaseItem dbItem;
 		private readonly MergeConfig mergeConfig;
 		private readonly MergeItemView view;
@@ -17,7 +16,6 @@
 			this.dbItem = dbItem;
 			this.view = view;
 			MergeLevel = mergeLevel;
-			dbInfo = new ItemDbInfo { ID = dbItem.ID, Name = dbItem.Name };
 
 			this.view.SetMergeLevelText(MergeLevel);
 		}
@@ -26,7 +24,7 @@
 
 		public bool TouchStartFlag => view.TouchStartFlag;
 		public bool TouchEndFlag => view.TouchEndFlag;
-		public ItemDbInfo DbInfo => new ItemDbInfo { ID = dbItem.ID, Name = dbItem.Name };
+		public ItemDbInfo DbInfo => new ItemDbInfo(dbItem.ID, dbItem.Name);
 
 		public void Dispose()
 		{

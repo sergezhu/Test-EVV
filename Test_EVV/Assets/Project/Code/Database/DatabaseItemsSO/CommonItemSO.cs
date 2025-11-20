@@ -1,9 +1,8 @@
 ﻿namespace Code.Database
 {
-	using System;
 	using UnityEngine;
 
-	[Serializable]
+	[CreateAssetMenu(fileName = "Common Item", menuName = "Configs/Items/Database/ComonItem")]
 	public class CommonItemSO : DatabaseItemSO
 	{
 		[SerializeField] private CommonItemAttributes commonItemAttributes;

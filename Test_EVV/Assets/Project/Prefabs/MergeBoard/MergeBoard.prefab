@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1044016078391151736}
   - component: {fileID: 5918050160586945627}
   - component: {fileID: 8545893602652053651}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CellsBounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 5832616049626277996}
   - component: {fileID: 5832616049626277997}
   - component: {fileID: 5832616049626277986}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5832616049645174061}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5832616050013738091}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Cells
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5832616050043172940}
   - component: {fileID: 5832616050043172941}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: MergeBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5832616050043172930}
-  m_LocalRotation: {x: -0.06736228, y: 0, z: 0, w: 0.9977286}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -100, y: 0.00045381114, z: 0.0067212116}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -298,4 +298,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellsRoot: {fileID: 5832616050013738091}
+  cellsBounds: {fileID: 7644725883868769359}
   cells: []

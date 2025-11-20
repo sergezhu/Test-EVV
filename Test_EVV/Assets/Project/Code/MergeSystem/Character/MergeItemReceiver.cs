@@ -88,7 +88,7 @@
 
 			CurrentDatabaseItemInternal.Value = dbItem;
 
-			var item = dbItem == null ? default : new ItemDbInfo { ID = dbItem.ID, Name = dbItem.Name };
+			var item = dbItem == null ? default : new ItemDbInfo(dbItem.ID, dbItem.Name);
 			CurrentItemInternal.Value = item;
 
 			Debug.Log($"Receive DB item : {item.Name}");

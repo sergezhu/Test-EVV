@@ -53,7 +53,7 @@
 				{
 					trail.Clear();
 				}
-				catch (MissingReferenceException ex)
+				catch (MissingReferenceException)
 				{
 					Debug.LogError($"Missed trail on {transform.parent.name}");
 				}

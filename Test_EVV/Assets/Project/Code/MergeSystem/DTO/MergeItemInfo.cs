@@ -9,8 +9,5 @@ namespace Code.MergeSystem
 	{
 		[InlineProperty] [HideLabel]
 		public ItemDbInfo DbInfo;
-		public int BuyCost;
-		public int BoughtsCountToUpgrade;
-		public float RewardPerHit;
 	}
 }

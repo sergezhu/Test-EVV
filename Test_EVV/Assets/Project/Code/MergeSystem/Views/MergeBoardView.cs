@@ -7,6 +7,7 @@
 	public class MergeBoardView : MonoBehaviour, IInitializable
 	{
 		[SerializeField] private Transform cellsRoot;
+		[SerializeField] private Transform cellsBounds;
 		[SerializeField] private List<MergeBoardCellView> cells;
 
 		public bool IsLocked { get; set; }

@@ -59,22 +59,7 @@
 
 			return dbItem;
 		}
-
-		public int GetBuyCost(int mergeLevel)
-		{
-			return mergeSequence[mergeLevel].BuyCost;
-		}
-
-		public float GetRewardPerHit(int mergeLevel)
-		{
-			return mergeSequence[mergeLevel].RewardPerHit;
-		}
-
-		public int GetBoughtsCountToUpgrade(int mergeLevel)
-		{
-			return mergeSequence[mergeLevel].BoughtsCountToUpgrade;
-		}
-
+		
 		public bool HasNextMergeLevel(uint itemId)
 		{
 			var mergeLevel = GetMergeLevel(itemId);

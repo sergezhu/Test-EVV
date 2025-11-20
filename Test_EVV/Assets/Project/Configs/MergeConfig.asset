@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5c18ba7d0ac446f8ae3e3baddcb6c5f, type: 3}
+  m_Name: MergeConfig
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  itemsLibrary: {fileID: 11400000, guid: 87e615e89eccb4d408bcad8f98397cc4, type: 2}
+  boardSize: {x: 4, y: 3}
+  raycastDistance: 100
+  spawnedItemsCountByStart: 1
+  draggedItemOffsetY: 1
+  mergeItemLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  mergeBoardLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  mergeItemReceiverLayer:
+    serializedVersion: 2
+    m_Bits: 8192
+  draggedMergeItemLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  mergeSequence:
+  - DbInfo:
+      _id: 0
+      _name: 
