@@ -1,7 +1,7 @@
 namespace Code.MergeSystem
 {
-	using UnityEngine;
 	using Code.Database;
+	using UnityEngine;
 
 	public struct MergeRequestData
 	{

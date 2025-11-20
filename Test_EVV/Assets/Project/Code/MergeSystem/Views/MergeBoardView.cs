@@ -6,47 +6,47 @@
 
 	public class MergeBoardView : MonoBehaviour, IInitializable
 	{
-		[SerializeField] private Transform _cellsRoot;
-		[SerializeField] private List<MergeBoardCellView> _cells;
-		
+		[SerializeField] private Transform cellsRoot;
+		[SerializeField] private List<MergeBoardCellView> cells;
+
 		public bool IsLocked { get; set; }
 
 		public void Initialize()
 		{
-			_cells.ForEach( c => c.Initialize() );
+			cells.ForEach(c => c.Initialize());
 		}
 
-		public Vector3 GetSpawnPosition( int cellIndex )
+		public Vector3 GetSpawnPosition(int cellIndex)
 		{
-			return _cells[cellIndex].SpawnPosition;
+			return cells[cellIndex].SpawnPosition;
 		}
 
-		public Transform GetItemRoot( int cellIndex )
+		public Transform GetItemRoot(int cellIndex)
 		{
-			return _cells[cellIndex].ItemsRoot;
+			return cells[cellIndex].ItemsRoot;
 		}
 
-		public void SwitchToState( int cellIndex, CellInteractionState state )
+		public void SwitchToState(int cellIndex, CellInteractionState state)
 		{
-			_cells[cellIndex].SwitchToState( state );
+			cells[cellIndex].SwitchToState(state);
 		}
 
-		public void SwitchToState( MergeBoardCellView cell, CellInteractionState state )
+		public void SwitchToState(MergeBoardCellView cell, CellInteractionState state)
 		{
-			if(cell == null)
+			if (cell == null)
 				return;
-			
-			cell.SwitchToState( state );
+
+			cell.SwitchToState(state);
 		}
 
 		public void DisableCellsHints()
 		{
-			_cells.ForEach( cell => cell.SwitchToState( CellInteractionState.Default ) );
+			cells.ForEach(cell => cell.SwitchToState(CellInteractionState.Default));
 		}
 
-		public int GetCellIndex( MergeBoardCellView cellView )
+		public int GetCellIndex(MergeBoardCellView cellView)
 		{
-			return _cells.FindIndex( cell => cell == cellView );
+			return cells.FindIndex(cell => cell == cellView);
 		}
 	}
 }

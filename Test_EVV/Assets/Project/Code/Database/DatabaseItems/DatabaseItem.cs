@@ -7,28 +7,29 @@
 	[Serializable]
 	public abstract class DatabaseItem : IDatabaseItem
 	{
-		[SerializeField] private uint _id;
-		[SerializeField] private string _name;
-		[SerializeField] private Sprite _icon;
-		[SerializeField] private MergeItemView _itemPrefab;
+		[SerializeField] private uint id;
+		[SerializeField] private string name;
+		[SerializeField] private Sprite icon;
+		[SerializeField] private MergeItemView itemPrefab;
 
 
-		public DatabaseItem( uint id, string name, Sprite icon )
+		public DatabaseItem(uint id, string name, Sprite icon)
 		{
-			_id = id;
-			_name = name;
-			_icon = icon;
+			this.id = id;
+			this.name = name;
+			this.icon = icon;
 		}
 
+		public Sprite Icon => icon;
+		public MergeItemView ItemPrefab => itemPrefab;
 
-		public uint ID => _id;
-		public string Name => _name;
-		public Sprite Icon => _icon;
-		public MergeItemView ItemPrefab => _itemPrefab;
 
-		public void ValidateID( uint id )
+		public uint ID => id;
+		public string Name => name;
+
+		public void ValidateID(uint id)
 		{
-			_id = id;
+			this.id = id;
 		}
 	}
 }

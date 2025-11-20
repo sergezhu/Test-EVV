@@ -7,70 +7,62 @@
 	[Serializable]
 	public struct MergeStatistic
 	{
-		[SerializeField] private int _upgradeCount;
-		[SerializeField] private List<MergeLevelStatistic> _mergeLevelStatistics;
+		[SerializeField] private int upgradeCount;
+		[SerializeField] private List<MergeLevelStatistic> mergeLevelStatistics;
 
 
-		public int UpgradeCount => _upgradeCount;
+		public int UpgradeCount => upgradeCount;
 
 		public void Initialize()
 		{
-			_mergeLevelStatistics = new List<MergeLevelStatistic>();
-			_upgradeCount = 0;
+			mergeLevelStatistics = new List<MergeLevelStatistic>();
+			upgradeCount = 0;
 		}
-		
 
-		public MergeLevelStatistic? GetStatistic( int mergeLevel )
+
+		public MergeLevelStatistic? GetStatistic(int mergeLevel)
 		{
-			if ( TryFindStatisticIndex( mergeLevel, out var index ) )
-			{
-				return _mergeLevelStatistics[index];
-			}
+			if (TryFindStatisticIndex(mergeLevel, out var index)) return mergeLevelStatistics[index];
 
 			return null;
 		}
 
-		public bool TryFindStatisticIndex( int mergeLevel, out int statisticIndex )
+		public bool TryFindStatisticIndex(int mergeLevel, out int statisticIndex)
 		{
-			statisticIndex = _mergeLevelStatistics.FindIndex( stat => stat.MergeLevel == mergeLevel );
+			statisticIndex = mergeLevelStatistics.FindIndex(stat => stat.MergeLevel == mergeLevel);
 			return statisticIndex != -1;
 		}
 
-		public void AddMerged( int mergeLevel )
+		public void AddMerged(int mergeLevel)
 		{
-			if ( TryFindStatisticIndex( mergeLevel, out var statisticIndex ) == false )
-			{
-				AddNewRecord( mergeLevel );
-			};
+			if (TryFindStatisticIndex(mergeLevel, out var statisticIndex) == false) AddNewRecord(mergeLevel);
+			;
 
-			TryFindStatisticIndex( mergeLevel, out statisticIndex );
-			var stat = _mergeLevelStatistics[statisticIndex];
+			TryFindStatisticIndex(mergeLevel, out statisticIndex);
+			var stat = mergeLevelStatistics[statisticIndex];
 			stat.MergedCount += 1;
-			_mergeLevelStatistics[statisticIndex] = stat;
+			mergeLevelStatistics[statisticIndex] = stat;
 		}
 
-		public void AddBuyed( int mergeLevel )
+		public void AddBuyed(int mergeLevel)
 		{
-			if ( TryFindStatisticIndex( mergeLevel, out var statisticIndex ) == false )
-			{
-				AddNewRecord( mergeLevel );
-			}
+			if (TryFindStatisticIndex(mergeLevel, out var statisticIndex) == false) AddNewRecord(mergeLevel);
 
-			TryFindStatisticIndex( mergeLevel, out statisticIndex );
-			var stat = _mergeLevelStatistics[statisticIndex];
+			TryFindStatisticIndex(mergeLevel, out statisticIndex);
+			var stat = mergeLevelStatistics[statisticIndex];
 			stat.BuyedCount += 1;
-			_mergeLevelStatistics[statisticIndex] = stat;
+			mergeLevelStatistics[statisticIndex] = stat;
 		}
 
-		private void AddNewRecord( int mergeLevel )
+		private void AddNewRecord(int mergeLevel)
 		{
-			var newRecord = new MergeLevelStatistic() { MergeLevel = mergeLevel };
-			_mergeLevelStatistics.Add( newRecord );
+			var newRecord = new MergeLevelStatistic { MergeLevel = mergeLevel };
+			mergeLevelStatistics.Add(newRecord);
 		}
 
 		public void AddUpgradeCount()
 		{
-			_upgradeCount += 1;
+			upgradeCount += 1;
 		}
 	}
 }

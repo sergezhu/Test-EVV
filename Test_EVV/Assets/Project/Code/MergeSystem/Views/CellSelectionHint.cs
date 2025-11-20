@@ -5,51 +5,50 @@
 
 	public class CellSelectionHint : MonoBehaviour
 	{
+		[SerializeField] private GameObject successHitHintLayer;
+		[SerializeField] private GameObject failHitHintLayer;
+		[SerializeField] private GameObject otherMergeableHintLayer;
 
-		[SerializeField] private GameObject _successHitHintLayer;
-		[SerializeField] private GameObject _failHitHintLayer;
-		[SerializeField] private GameObject _otherMergeableHintLayer;
-
-		private CellInteractionState _interactionState;
+		private CellInteractionState interactionState;
 
 		public void Initialize()
 		{
-			SetState( CellInteractionState.Default );
+			SetState(CellInteractionState.Default);
 		}
 
-		public void SwitchToState( CellInteractionState state )
+		public void SwitchToState(CellInteractionState state)
 		{
-			if ( state == _interactionState )
+			if (state == interactionState)
 				return;
 
-			_interactionState = state;
+			interactionState = state;
 
-			SetState( state );
+			SetState(state);
 		}
 
-		private void SetState( CellInteractionState interactionState )
+		private void SetState(CellInteractionState interactionState)
 		{
-			switch ( interactionState )
+			switch (interactionState)
 			{
 				case CellInteractionState.Default:
-					_successHitHintLayer.Hide();
-					_failHitHintLayer.Hide();
-					_otherMergeableHintLayer.Hide();
+					successHitHintLayer.Hide();
+					failHitHintLayer.Hide();
+					otherMergeableHintLayer.Hide();
 					break;
 				case CellInteractionState.Success:
-					_successHitHintLayer.Show();
-					_failHitHintLayer.Hide();
-					_otherMergeableHintLayer.Hide();
+					successHitHintLayer.Show();
+					failHitHintLayer.Hide();
+					otherMergeableHintLayer.Hide();
 					break;
 				case CellInteractionState.Fail:
-					_successHitHintLayer.Hide();
-					_failHitHintLayer.Show();
-					_otherMergeableHintLayer.Hide();
+					successHitHintLayer.Hide();
+					failHitHintLayer.Show();
+					otherMergeableHintLayer.Hide();
 					break;
 				case CellInteractionState.OtherMergeable:
-					_successHitHintLayer.Hide();
-					_failHitHintLayer.Hide();
-					_otherMergeableHintLayer.Show();
+					successHitHintLayer.Hide();
+					failHitHintLayer.Hide();
+					otherMergeableHintLayer.Show();
 					break;
 			}
 		}

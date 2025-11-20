@@ -6,14 +6,14 @@
 	[Serializable]
 	public class CommonItem : DatabaseItem
 	{
-		[SerializeField] private CommonItemAttributes _attributes;
+		[SerializeField] private CommonItemAttributes attributes;
 
 
-		public CommonItem( uint id, string name, CommonItemAttributes attributes, Sprite icon ) : base( id, name, icon )
+		public CommonItem(uint id, string name, CommonItemAttributes attributes, Sprite icon) : base(id, name, icon)
 		{
-			_attributes = attributes;
+			this.attributes = attributes;
 		}
 
-		public CommonItemAttributes Attributes => _attributes;
+		public CommonItemAttributes Attributes => attributes;
 	}
-}	
+}

@@ -1,25 +1,24 @@
 namespace Code.Input
 {
-    using Code.Core;
+	using Code.Core;
 
-    public interface IInputManager
-    {
-        InputActions.TouchActions Touch { get; }
-    }
-    
+	public interface IInputManager
+	{
+		InputActions.TouchActions Touch { get; }
+	}
 
 
-    public class InputManager : IInputManager, IInitializable
-    {
-        private InputActions _actions;
+	public class InputManager : IInputManager, IInitializable
+	{
+		private InputActions actions;
 
-        public InputActions.TouchActions Touch { get; private set; }
-        
-        public void Initialize()
-        {
-            _actions = new InputActions();
-            
-            Touch = _actions.Touch;
-        }
-    }
+		public void Initialize()
+		{
+			actions = new InputActions();
+
+			Touch = actions.Touch;
+		}
+
+		public InputActions.TouchActions Touch { get; private set; }
+	}
 }

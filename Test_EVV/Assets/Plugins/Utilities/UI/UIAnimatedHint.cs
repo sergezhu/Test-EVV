@@ -27,15 +27,15 @@
 		[SerializeField] private float _offsetDuration;
 		[SerializeField] private float _showDuration;
 
-		Sequence _sequence;
+		Sequence sequence;
 		
-		private RectTransform _rt;
-		private Vector3 _startPosY;
+		private RectTransform rt;
+		private Vector3 startPosY;
 
 		private void Awake()
 		{
-			_rt = GetComponent<RectTransform>();
-			_startPosY = _rt.localPosition;
+			rt = GetComponent<RectTransform>();
+			startPosY = rt.localPosition;
 		}
 
 		public void ShowHint()
@@ -50,53 +50,53 @@
 
 		public void ShowHint( Action onComplete )
 		{
-			_sequence?.Kill();
+			sequence?.Kill();
 
 			var startLocalScaleFactor = 0.5f;
 			
 			_hintCG.alpha = 0;
-			_rt.localPosition = _startPosY;
-			_rt.localScale = startLocalScaleFactor * Vector3.one;
+			rt.localPosition = startPosY;
+			rt.localScale = startLocalScaleFactor * Vector3.one;
 			
 			_hintCG.Show();
 
-			_sequence = DOTween.Sequence();
+			sequence = DOTween.Sequence();
 			
 
-			_sequence.Insert( 0, DOVirtual.Float( 0f, 1f, _fadeInDuration, v =>
+			sequence.Insert( 0, DOVirtual.Float( 0f, 1f, _fadeInDuration, v =>
 			{
 				_hintCG.alpha = v;
-				_rt.localScale = Vector3.Lerp( startLocalScaleFactor * Vector3.one, Vector3.one, v );
+				rt.localScale = Vector3.Lerp( startLocalScaleFactor * Vector3.one, Vector3.one, v );
 			} ) );
 			
-			_sequence.Insert( _fadeInDuration, DOVirtual.Float( 0f, 1f, _offsetDuration, v =>
+			sequence.Insert( _fadeInDuration, DOVirtual.Float( 0f, 1f, _offsetDuration, v =>
 								  {
-									  var pos = Vector3.Lerp( _startPosY, _startPosY + _yOffset * Vector3.up, v );
-									  _rt.localPosition = pos;
+									  var pos = Vector3.Lerp( startPosY, startPosY + _yOffset * Vector3.up, v );
+									  rt.localPosition = pos;
 								  } )
 								  .SetEase( Ease.InOutSine )
 								  .SetLoops( 10, LoopType.Yoyo ) );
 			
-			_sequence.Insert( _fadeInDuration + _showDuration, DOVirtual.Float( 1f, 0f, _fadeOutDuration, v => _hintCG.alpha = v ) );
+			sequence.Insert( _fadeInDuration + _showDuration, DOVirtual.Float( 1f, 0f, _fadeOutDuration, v => _hintCG.alpha = v ) );
 
-			_sequence.OnComplete( () =>
+			sequence.OnComplete( () =>
 			{
-				_sequence = null;
+				sequence = null;
 				onComplete?.Invoke();
 			} );
 		}
 
 		public void HideHint( Action onComplete )
 		{
-			_sequence?.Kill();
+			sequence?.Kill();
 
 			_hintCG.alpha = 1;
 
-			_sequence.Insert( 0, DOVirtual.Float( 0f, 1f, _fadeInDuration, v => _hintCG.alpha = v ) );
+			sequence.Insert( 0, DOVirtual.Float( 0f, 1f, _fadeInDuration, v => _hintCG.alpha = v ) );
 
-			_sequence.OnComplete( () =>
+			sequence.OnComplete( () =>
 			{
-				_sequence = null;
+				sequence = null;
 				_hintCG.Hide();
 				
 				onComplete?.Invoke();

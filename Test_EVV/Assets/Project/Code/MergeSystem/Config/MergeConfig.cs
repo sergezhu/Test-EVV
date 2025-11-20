@@ -7,90 +7,89 @@
 	using UnityEngine;
 
 	[Serializable]
-	[CreateAssetMenu( fileName = "MergeConfig", menuName = "Configs/MergeConfig")]
+	[CreateAssetMenu(fileName = "MergeConfig", menuName = "Configs/MergeConfig")]
 	public class MergeConfig : SerializedScriptableObject
 	{
-		[SerializeField] private ItemsLibrary _itemsLibrary;
-		[SerializeField] private Vector2Int _boardSize;
-		[SerializeField] private float _raycastDistance = 100;
-		[SerializeField] private int _spawnedItemsCountByStart = 1;
-		[SerializeField] private float _draggedItemOffsetY = 1;
-		
+		[SerializeField] private ItemsLibrary itemsLibrary;
+		[SerializeField] private Vector2Int boardSize;
+		[SerializeField] private float raycastDistance = 100;
+		[SerializeField] private int spawnedItemsCountByStart = 1;
+		[SerializeField] private float draggedItemOffsetY = 1;
+
 		[Header("Layers")]
-		[SerializeField] private LayerMask _mergeItemLayer;
-		[SerializeField] private LayerMask _mergeBoardLayer;
-		[SerializeField] private LayerMask _mergeItemReceiverLayer;
-		[SerializeField] private LayerMask _draggedMergeItemLayer;
+		[SerializeField] private LayerMask mergeItemLayer;
+		[SerializeField] private LayerMask mergeBoardLayer;
+		[SerializeField] private LayerMask mergeItemReceiverLayer;
+		[SerializeField] private LayerMask draggedMergeItemLayer;
 
-		[Header( "Merge Sequence" )]
-		[SerializeField] private List<MergeItemInfo> _mergeSequence;
+		[Header("Merge Sequence")]
+		[SerializeField] private List<MergeItemInfo> mergeSequence;
 
 
-		public Vector2Int BoardSize => _boardSize;
+		public Vector2Int BoardSize => boardSize;
 
-		public float RaycastDistance => _raycastDistance;
-		public float DraggedItemOffsetY => _draggedItemOffsetY;
-		public int SpawnedItemsCountByStart => _spawnedItemsCountByStart;
-		public int MergeItemLayer => _mergeItemLayer.value;
-		public int MergeBoardLayer => _mergeBoardLayer.value;
-		public int MergeItemReceiverLayer => _mergeItemReceiverLayer.value;
-		public int DraggedMergeItemLayer => _draggedMergeItemLayer.value;
+		public float RaycastDistance => raycastDistance;
+		public float DraggedItemOffsetY => draggedItemOffsetY;
+		public int SpawnedItemsCountByStart => spawnedItemsCountByStart;
+		public int MergeItemLayer => mergeItemLayer.value;
+		public int MergeBoardLayer => mergeBoardLayer.value;
+		public int MergeItemReceiverLayer => mergeItemReceiverLayer.value;
+		public int DraggedMergeItemLayer => draggedMergeItemLayer.value;
 
-		public int GetMergeLevel( uint itemID )
+		public int GetMergeLevel(uint itemID)
 		{
-			var index = _mergeSequence.FindIndex( d => d.DbInfo.ID == itemID );
+			var index = mergeSequence.FindIndex(d => d.DbInfo.ID == itemID);
 			return index;
 		}
 
-		public int GetNextMergeLevel( uint itemID )
+		public int GetNextMergeLevel(uint itemID)
 		{
-			return GetMergeLevel( itemID ) + 1;
+			return GetMergeLevel(itemID) + 1;
 		}
 
-		public ItemDbInfo GetMergeItem( int mergeLevel )
+		public ItemDbInfo GetMergeItem(int mergeLevel)
 		{
-			return _mergeSequence[mergeLevel].DbInfo;
+			return mergeSequence[mergeLevel].DbInfo;
 		}
 
-		public IDatabaseItem GetMergeDbItem( int mergeLevel )
+		public IDatabaseItem GetMergeDbItem(int mergeLevel)
 		{
-			var item = GetMergeItem( mergeLevel );
-			var dbItem = _itemsLibrary.GetDbItem( item.ID );
-			
+			var item = GetMergeItem(mergeLevel);
+			var dbItem = itemsLibrary.GetDbItem(item.ID);
+
 			return dbItem;
 		}
 
-		public int GetBuyCost( int mergeLevel )
+		public int GetBuyCost(int mergeLevel)
 		{
-			return _mergeSequence[mergeLevel].BuyCost;
+			return mergeSequence[mergeLevel].BuyCost;
 		}
 
-		public float GetRewardPerHit( int mergeLevel )
+		public float GetRewardPerHit(int mergeLevel)
 		{
-			return _mergeSequence[mergeLevel].RewardPerHit;
+			return mergeSequence[mergeLevel].RewardPerHit;
 		}
 
-		public int GetBoughtsCountToUpgrade( int mergeLevel )
+		public int GetBoughtsCountToUpgrade(int mergeLevel)
 		{
-			return _mergeSequence[mergeLevel].BoughtsCountToUpgrade;
+			return mergeSequence[mergeLevel].BoughtsCountToUpgrade;
 		}
 
-		public bool HasNextMergeLevel( uint itemId )
+		public bool HasNextMergeLevel(uint itemId)
 		{
-			var mergeLevel = GetMergeLevel( itemId );
-			return mergeLevel != _mergeSequence.Count - 1;
+			var mergeLevel = GetMergeLevel(itemId);
+			return mergeLevel != mergeSequence.Count - 1;
 		}
 
-		public bool HasNextMergeLevel( int currentMergeLevel )
+		public bool HasNextMergeLevel(int currentMergeLevel)
 		{
-			return currentMergeLevel != _mergeSequence.Count - 1;
+			return currentMergeLevel != mergeSequence.Count - 1;
 		}
 
-		public ItemDbInfo GetNextMergeItem( uint itemId )
+		public ItemDbInfo GetNextMergeItem(uint itemId)
 		{
-			var index = _mergeSequence.FindIndex(d => d.DbInfo.ID == itemId );
-			return _mergeSequence[index + 1].DbInfo;
+			var index = mergeSequence.FindIndex(d => d.DbInfo.ID == itemId);
+			return mergeSequence[index + 1].DbInfo;
 		}
 	}
 }
-

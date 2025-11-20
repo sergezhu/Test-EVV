@@ -4,18 +4,18 @@
 
 	public class RectTransformOwner: MonoBehaviour
 	{
-		protected RectTransform _rectTransform;
+		protected RectTransform RT;
 
 		public void Initialize()
 		{
-			TryGetComponent( out _rectTransform );
+			TryGetComponent( out RT);
 		}
 
-		public RectTransform RectTransform => _rectTransform;
-		public Vector2 SizeDelta => _rectTransform.sizeDelta;
-		public Vector2 Size => _rectTransform.rect.size;
-		public Vector3 Center() => _rectTransform.TransformPoint( _rectTransform.rect.center );
-		public Vector2 Position => _rectTransform.position;
-		public Vector2 LocalScale => _rectTransform.localScale;
+		public RectTransform RectTransform => RT;
+		public Vector2 SizeDelta => RT.sizeDelta;
+		public Vector2 Size => RT.rect.size;
+		public Vector3 Center() => RT.TransformPoint(RT.rect.center );
+		public Vector2 Position => RT.position;
+		public Vector2 LocalScale => RT.localScale;
 	}
 }

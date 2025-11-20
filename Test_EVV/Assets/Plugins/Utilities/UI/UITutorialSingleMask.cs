@@ -4,9 +4,9 @@
 
 	public class UITutorialSingleMask : MonoBehaviour
 	{
-		private RectTransform _rectTransform;
+		private RectTransform rectTransform;
 
-		private RectTransform RT => _rectTransform ? _rectTransform : GetComponent<RectTransform>();
+		private RectTransform RT => rectTransform ? rectTransform : GetComponent<RectTransform>();
 
 		//public void SetGeometry(Vector3 position, Vector2 size, float horizontalPadding = 0, float verticalPadding = 0 )
 		

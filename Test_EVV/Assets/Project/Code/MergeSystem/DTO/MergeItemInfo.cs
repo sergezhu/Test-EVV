@@ -7,7 +7,7 @@ namespace Code.MergeSystem
 	[Serializable]
 	public struct MergeItemInfo
 	{
-		[InlineProperty, HideLabel]
+		[InlineProperty] [HideLabel]
 		public ItemDbInfo DbInfo;
 		public int BuyCost;
 		public int BoughtsCountToUpgrade;

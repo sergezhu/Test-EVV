@@ -7,66 +7,80 @@
 
 	public class MergeItem : IDisposable
 	{
-		private readonly IDatabaseItem _dbItem;
-		private readonly MergeItemView _view;
-		private readonly int _mergeLevel;
-		private readonly MergeConfig _mergeConfig;
-		private readonly ItemDbInfo _dbInfo;
+		private readonly ItemDbInfo dbInfo;
+		private readonly IDatabaseItem dbItem;
+		private readonly MergeConfig mergeConfig;
+		private readonly MergeItemView view;
 
-		public MergeItem( IDatabaseItem dbItem, MergeItemView view, int mergeLevel )
+		public MergeItem(IDatabaseItem dbItem, MergeItemView view, int mergeLevel)
 		{
-			_dbItem = dbItem;
-			_view = view;
-			_mergeLevel = mergeLevel;
-			_dbInfo = new ItemDbInfo { ID = dbItem.ID, Name = dbItem.Name };
+			this.dbItem = dbItem;
+			this.view = view;
+			MergeLevel = mergeLevel;
+			dbInfo = new ItemDbInfo { ID = dbItem.ID, Name = dbItem.Name };
 
-			_view.SetMergeLevelText( _mergeLevel );
+			this.view.SetMergeLevelText(MergeLevel);
 		}
 
-		public int MergeLevel => _mergeLevel;
-		public bool TouchStartFlag => _view.TouchStartFlag;
-		public bool TouchEndFlag => _view.TouchEndFlag;
-		public ItemDbInfo DbInfo => new ItemDbInfo { ID = _dbItem.ID, Name = _dbItem.Name };
+		public int MergeLevel { get; }
 
-
-		public void SetPosition( Vector3 worldPosition )
-		{
-			if ( _view == null )
-				throw new NullReferenceException("(MergeItemView) _view is null");
-			
-			_view.SetPosition( worldPosition );
-		}
-
-		public void Rollback()
-		{
-			_view.ResetPosition();
-			_view.ResetTouchFlags();
-		}
-
-		public void DestroyView()
-		{
-			Object.Destroy( _view.gameObject );
-		}
+		public bool TouchStartFlag => view.TouchStartFlag;
+		public bool TouchEndFlag => view.TouchEndFlag;
+		public ItemDbInfo DbInfo => new ItemDbInfo { ID = dbItem.ID, Name = dbItem.Name };
 
 		public void Dispose()
 		{
 		}
 
-		public void PlayShowAnimation( Action onComplete )
+
+		public void SetPosition(Vector3 worldPosition)
 		{
-			_view.DoScaleInAnimation( onComplete );
+			if (view == null)
+				throw new NullReferenceException("(MergeItemView) _view is null");
+
+			view.SetPosition(worldPosition);
 		}
 
-		public void PlayHideAnimation( Action onComplete )
+		public void Rollback()
 		{
-			_view.DoScaleOutAnimation( onComplete );
+			view.ResetPosition();
+			view.ResetTouchFlags();
+		}
+
+		public void DestroyView()
+		{
+			Object.Destroy(view.gameObject);
+		}
+
+		public void PlayShowAnimation(Action onComplete)
+		{
+			view.DoScaleInAnimation(onComplete);
+		}
+
+		public void PlayHideAnimation(Action onComplete)
+		{
+			view.DoScaleOutAnimation(onComplete);
 		}
 
 
-		public void SetDraggedItemLayer() => _view.SetDraggedItemLayer();
-		public void SetDefaultItemLayer() => _view.SetDefaultItemLayer();
+		public void SetDraggedItemLayer()
+		{
+			view.SetDraggedItemLayer();
+		}
 
-		public void PlaySpawnFX() => _view.PlaySpawnFX();
-		public void PlayMergeFX() => _view.PlayMergeFX();
+		public void SetDefaultItemLayer()
+		{
+			view.SetDefaultItemLayer();
+		}
+
+		public void PlaySpawnFX()
+		{
+			view.PlaySpawnFX();
+		}
+
+		public void PlayMergeFX()
+		{
+			view.PlayMergeFX();
+		}
 	}
 }

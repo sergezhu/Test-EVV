@@ -24,6 +24,7 @@
 		public float angleOffset = 0f; // Смещение начального угла
 		public CircularDirection direction;
 		public AngleStepType angleStepType;
+		
 		[ShowIf( "angleStepType", AngleStepType.Fixed )]
 		public float fixedAngleStep;
 
