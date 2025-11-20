@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f14d08cb9a64f52bec79040f3d782a8, type: 3}
-  m_Name: '[0001] qdwd'
+  m_Name: '[0003] Blueberry'
   m_EditorClassIdentifier: 
-  id: 1
-  itemName: qdwd
-  icon: {fileID: 0}
-  boardItemPrefab: {fileID: 0}
+  id: 3
+  itemName: Blueberry
+  icon: {fileID: 21300000, guid: b3a0f9da082f9c74aa09cc8906ec1a22, type: 3}
+  boardItemPrefab: {fileID: 2134395116435085032, guid: 2a024c4a088785e42968ca1e94e84177, type: 3}
   commonItemAttributes:
-    MergeReward: 0
+    MergeReward: 10

@@ -22,4 +22,11 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _databaseItems:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 9f876c4087e26f44db5c3e7930c5484d, type: 2}
+  - {fileID: 11400000, guid: 9f58a050384abd34999cc60561220059, type: 2}
+  - {fileID: 11400000, guid: fb0eb28d385362f4191fbef7416b0a1a, type: 2}
+  - {fileID: 11400000, guid: 4ee04919a0bb9e0458a5097f36a5c942, type: 2}
+  - {fileID: 11400000, guid: b9404e7c9ff08fd488723926bf9610d6, type: 2}
+  - {fileID: 11400000, guid: a2a14e8fe09ae5341a0065e9367e2685, type: 2}
+  - {fileID: 11400000, guid: 615ad8b043966c4458cb417d19fc747a, type: 2}
+  - {fileID: 11400000, guid: 330c54e92bb59c046a491bfe9a1fc8ef, type: 2}
