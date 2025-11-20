@@ -15,10 +15,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - MergeBoard
+  - MergeItem
+  - DraggedMergeItem
+  - MergeItemReceiver
   - 
   - 
   - 
