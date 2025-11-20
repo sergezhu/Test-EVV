@@ -16,20 +16,20 @@
 		{
 			DatabaseItem dbItem = null;
 
-			var index = _databaseItems.FindIndex(def => def.ID == id);
-			var isFounded = index != -1;
+			int index = _databaseItems.FindIndex(def => def.ID == id);
+			bool isFounded = index != -1;
 
 			if (isFounded) dbItem = _databaseItems[index].GetItem();
 
 			return dbItem;
 		}
 
-		private DatabaseItem TryGetItemByName(string name)
+		public IDatabaseItem TryGetItemByName(string itemName)
 		{
 			DatabaseItem dbItem = null;
 
-			var index = _databaseItems.FindIndex(def => string.Equals(def.Name, name));
-			var isFounded = index != -1;
+			int index = _databaseItems.FindIndex(def => string.Equals(def.Name, itemName));
+			bool isFounded = index != -1;
 
 			if (isFounded) dbItem = _databaseItems[index].GetItem();
 
@@ -39,10 +39,10 @@
 
 		public ItemFactoryInfo GetFactoryInfo(uint itemId)
 		{
-			var index = _databaseItems.FindIndex(d => d.ID == itemId);
-			var dbItem = _databaseItems[index];
+			int index = _databaseItems.FindIndex(d => d.ID == itemId);
+			DatabaseItemSO dbItem = _databaseItems[index];
 
-			var info = new ItemFactoryInfo
+			ItemFactoryInfo info = new ItemFactoryInfo
 			{
 				Info = new ItemDbInfo(dbItem.ID, dbItem.Name),
 				ItemPrefab = dbItem.BoardItemPrefab

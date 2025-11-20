@@ -38,7 +38,7 @@
 
 		public int GetMergeLevel(uint itemID)
 		{
-			var index = mergeSequence.FindIndex(d => d.DbInfo.ID == itemID);
+			int index = mergeSequence.FindIndex(d => d.DbInfo.ID == itemID);
 			return index;
 		}
 
@@ -54,15 +54,15 @@
 
 		public IDatabaseItem GetMergeDbItem(int mergeLevel)
 		{
-			var item = GetMergeItem(mergeLevel);
-			var dbItem = itemsLibrary.GetDbItem(item.ID);
+			ItemDbInfo item = GetMergeItem(mergeLevel);
+			IDatabaseItem dbItem = itemsLibrary.GetDbItem(item.ID);
 
 			return dbItem;
 		}
 		
 		public bool HasNextMergeLevel(uint itemId)
 		{
-			var mergeLevel = GetMergeLevel(itemId);
+			int mergeLevel = GetMergeLevel(itemId);
 			return mergeLevel != mergeSequence.Count - 1;
 		}
 
@@ -73,8 +73,35 @@
 
 		public ItemDbInfo GetNextMergeItem(uint itemId)
 		{
-			var index = mergeSequence.FindIndex(d => d.DbInfo.ID == itemId);
+			int index = mergeSequence.FindIndex(d => d.DbInfo.ID == itemId);
 			return mergeSequence[index + 1].DbInfo;
+		}
+
+		private void OnValidate()
+		{
+			#if UNITY_EDITOR
+
+			ValidateMergeSequence();
+
+			#endif
+		}
+
+		private void ValidateMergeSequence()
+		{
+			for (int i = 0; i < mergeSequence.Count; i++)
+			{
+				MergeItemInfo itemInfo = mergeSequence[i];
+				ItemDbInfo dbInfo = itemInfo.DbInfo;
+				IDatabaseItem dbItem = itemsLibrary.TryGetItemByName(dbInfo.Name);
+				
+				if(dbItem is null)
+					continue;
+				
+				uint id = dbItem.ID;
+				
+				itemInfo.DbInfo = new ItemDbInfo(id, dbInfo.Name);
+				mergeSequence[i] = itemInfo;
+			}
 		}
 	}
 }
