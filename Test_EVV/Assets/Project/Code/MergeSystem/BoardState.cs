@@ -16,6 +16,17 @@
 			this.mergeBoardRestoreData = mergeBoardRestoreData;
 		}
 
+		public BoardState(int currentMergeLevel)
+		{
+			CurrentMergeLevel = currentMergeLevel;
+
+			MergeStatistic mergeStat = new MergeStatistic();
+			mergeStat.Initialize();
+			
+			mergeStatistic = mergeStat;
+			mergeBoardRestoreData = new List<MergeBoardCellRecord>();
+		}
+
 		public int CurrentMergeLevel { get; }
 
 		public MergeStatistic MergeStatistic => mergeStatistic;

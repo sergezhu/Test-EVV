@@ -19,6 +19,13 @@ namespace Code.Input.Touch
 		private bool isTouching;
 		private float touchWorldHeight;
 		private bool waitTouch;
+
+		public NewTouchInput(CameraController cameraController, IInputManager inputManager)
+		{
+			this.cameraController = cameraController;
+			this.inputManager = inputManager;
+		}
+
 		public int TouchCount => Touch.activeTouches.Count;
 
 		private InputActions.TouchActions TouchActions => inputManager.Touch;

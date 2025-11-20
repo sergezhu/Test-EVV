@@ -21,6 +21,9 @@
 		[SerializeField] private LayerMask mergeBoardLayer;
 		[SerializeField] private LayerMask mergeItemReceiverLayer;
 		[SerializeField] private LayerMask draggedMergeItemLayer;
+		
+		[Header("Debug")]
+		[SerializeField] private int startMergeLevel;
 
 		[Header("Merge Sequence")]
 		[SerializeField] private List<MergeItemInfo> mergeSequence;
@@ -35,6 +38,7 @@
 		public int MergeBoardLayer => mergeBoardLayer.value;
 		public int MergeItemReceiverLayer => mergeItemReceiverLayer.value;
 		public int DraggedMergeItemLayer => draggedMergeItemLayer.value;
+		public int StartMergeLevel => startMergeLevel;
 
 		public int GetMergeLevel(uint itemID)
 		{

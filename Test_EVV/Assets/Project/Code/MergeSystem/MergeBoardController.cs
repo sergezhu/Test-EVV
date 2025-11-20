@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Code.Core;
+	using Code.Database;
 	using Code.Input.Touch;
 	using UniRx;
 	using UnityEngine;
@@ -91,7 +92,7 @@
 
 		public void BuyItem()
 		{
-			var mergeLevel = boardState.CurrentMergeLevel;
+			int mergeLevel = boardState.CurrentMergeLevel;
 			CreateItemAtRandomPosition(mergeLevel);
 
 			boardState.AddBuyedToStats(mergeLevel);
@@ -101,8 +102,8 @@
 
 		public void TryUpgradeAllItemsToCurrentLevel()
 		{
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
 				if (itemsMatrix[x, y] == null)
 					continue;
@@ -143,17 +144,17 @@
 
 		public List<MergeCellInfo> GetCellsWithItemsInfo()
 		{
-			var result = new List<MergeCellInfo>();
+			List<MergeCellInfo> result = new List<MergeCellInfo>();
 
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
 				if (itemsMatrix[x, y] == null)
 					continue;
 
-				var level = itemsMatrix[x, y].MergeLevel;
-				var cellIndex = MatrixIndexToCellIndex(new Vector2Int(x, y), mergeConfig.BoardSize.x);
-				var cellPos = view.GetSpawnPosition(cellIndex);
+				int level = itemsMatrix[x, y].MergeLevel;
+				int cellIndex = MatrixIndexToCellIndex(new Vector2Int(x, y), mergeConfig.BoardSize.x);
+				Vector3 cellPos = view.GetSpawnPosition(cellIndex);
 
 				result.Add(new MergeCellInfo
 				{
@@ -169,18 +170,18 @@
 
 		public bool TryGetFirstMergePair(out MergeCellInfo from, out MergeCellInfo to)
 		{
-			var cellsInfos = GetCellsWithItemsInfo();
+			List<MergeCellInfo> cellsInfos = GetCellsWithItemsInfo();
 
 			from = default;
 			to = default;
 
-			foreach (var info in cellsInfos)
+			foreach (MergeCellInfo info in cellsInfos)
 			{
-				var sameLevelItemsCount = cellsInfos.Count(i => i.MergeLevel == info.MergeLevel);
+				int sameLevelItemsCount = cellsInfos.Count(i => i.MergeLevel == info.MergeLevel);
 
 				if (sameLevelItemsCount >= 2)
 				{
-					var infos = cellsInfos.Where(i => i.MergeLevel == info.MergeLevel).ToArray();
+					MergeCellInfo[] infos = cellsInfos.Where(i => i.MergeLevel == info.MergeLevel).ToArray();
 					from = infos[0];
 					to = infos[1];
 					return true;
@@ -197,8 +198,8 @@
 			if (receiver.HasItem == false)
 				return false;
 
-			var cellsInfos = GetCellsWithItemsInfo();
-			var fromIndex = cellsInfos.FindIndex(info => info.MergeLevel == receiver.GetCurrentMergeLevel());
+			List<MergeCellInfo> cellsInfos = GetCellsWithItemsInfo();
+			int fromIndex = cellsInfos.FindIndex(info => info.MergeLevel == receiver.GetCurrentMergeLevel());
 
 			if (fromIndex == -1)
 				return false;
@@ -211,11 +212,11 @@
 		public bool TryGetFirstRecordForEquipWithoutMerge(MergeItemReceiver receiver, out MergeCellInfo from)
 		{
 			from = default;
-			var cellsInfos = GetCellsWithItemsInfo();
+			List<MergeCellInfo> cellsInfos = GetCellsWithItemsInfo();
 
 			if (receiver.HasItem == false)
 			{
-				var hasItems = cellsInfos.Count > 0;
+				bool hasItems = cellsInfos.Count > 0;
 
 				if (hasItems == false)
 					return false;
@@ -224,7 +225,7 @@
 				return true;
 			}
 
-			var fromIndex = cellsInfos.FindIndex(info => info.MergeLevel != receiver.GetCurrentMergeLevel());
+			int fromIndex = cellsInfos.FindIndex(info => info.MergeLevel != receiver.GetCurrentMergeLevel());
 
 			if (fromIndex == -1)
 				return false;
@@ -271,13 +272,13 @@
 
 		private void SubscribeMergeItems()
 		{
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
 				if (itemsMatrix[x, y] == null)
 					continue;
 
-				var item = itemsMatrix[x, y];
+				MergeItem item = itemsMatrix[x, y];
 
 				//item.***.Subscribe
 			}
@@ -319,7 +320,7 @@
 
 			lastTouchData = data;
 
-			var itemViewHit = ThrowRaycastAndGetNearestItem();
+			MergeItemView itemViewHit = ThrowRaycastAndGetNearestItem();
 
 			if (itemViewHit != null)
 				itemViewHit.OnTouchStartHit();
@@ -328,7 +329,7 @@
 			Debug.DrawLine(data.MergeCameraPosition, data.MergeCameraPosition + data.WorldDirectionFromMergeCamera.normalized * mergeConfig.RaycastDistance,
 						   Color.red, 2f);
 
-			var item = FindItemWithStartHit();
+			MergeItem item = FindItemWithStartHit();
 			draggedItem = item;
 
 			if (draggedItem != null)
@@ -345,7 +346,7 @@
 						   Color.red, 2f);
 
 			//var receiver = ThrowRaycastAndGetItemReceiver();
-			FindCellOrReceiver(out var cellView, out var receiver);
+			FindCellOrReceiver(out MergeBoardCellView cellView, out MergeItemReceiver receiver);
 
 			Debug.Log($"OnTouchEnd : {data.WorldDirectionFromMergeCamera}, receiver is null : {receiver == null}, cellView is null : {cellView == null}");
 
@@ -378,8 +379,8 @@
 					mergeConfig.HasNextMergeLevel(draggedItem.DbInfo.ID) &&
 					allowedOperations.Contains(MergeOperation.EquipWithMerge))
 				{
-					var nextLevel = mergeConfig.GetNextMergeLevel(draggedItem.DbInfo.ID);
-					var nextItem = mergeConfig.GetMergeItem(nextLevel);
+					int nextLevel = mergeConfig.GetNextMergeLevel(draggedItem.DbInfo.ID);
+					ItemDbInfo nextItem = mergeConfig.GetMergeItem(nextLevel);
 					receiver.ReceiveItem(nextItem, new MergeItemReceiveOptions { CanPlayReceiveFX = true });
 					DestroyItem(draggedItem);
 
@@ -403,11 +404,11 @@
 
 			if (cellView != null)
 			{
-				var canMergeToCell = CanMergeToCell(cellView, out var cellIndex, out var matrixPos);
+				bool canMergeToCell = CanMergeToCell(cellView, out int cellIndex, out Vector2Int matrixPos);
 
 				if (canMergeToCell && allowedOperations.Contains(MergeOperation.MergeOnBoard))
 				{
-					var item = itemsMatrix[matrixPos.x, matrixPos.y];
+					MergeItem item = itemsMatrix[matrixPos.x, matrixPos.y];
 					DoMerge(draggedItem, item);
 					DestroyItem(draggedItem);
 					draggedItem = null;
@@ -448,12 +449,12 @@
 
 		private void UpdateOtherCellsCoordsCanBeMerged()
 		{
-			var mergeLevel = draggedItem.MergeLevel;
+			int mergeLevel = draggedItem.MergeLevel;
 
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
-				var mergeItem = itemsMatrix[x, y];
+				MergeItem mergeItem = itemsMatrix[x, y];
 
 				if (mergeItem == null)
 					continue;
@@ -481,8 +482,8 @@
 
 			IsMergeProcessing = true;
 
-			var nextMergeLevel = toItem.MergeLevel + 1;
-			var toItemCoord = FindItemCoords(toItem);
+			int nextMergeLevel = toItem.MergeLevel + 1;
+			Vector2Int toItemCoord = FindItemCoords(toItem);
 
 			fromItem.PlayHideAnimation(() => { DestroyItem(fromItem); });
 
@@ -494,7 +495,7 @@
 
 				boardState.AddMergedToStats(nextMergeLevel);
 
-				var item = itemsMatrix[toItemCoord.x, toItemCoord.y];
+				MergeItem item = itemsMatrix[toItemCoord.x, toItemCoord.y];
 				item.PlayMergeFX();
 				item.PlayShowAnimation(null);
 
@@ -525,28 +526,28 @@
 
 		private bool HasSameLevelAndExistNextLevel(MergeItem fromItem, MergeItem toItem)
 		{
-			var isItemsValid = fromItem != null && toItem != null && fromItem != toItem && fromItem.MergeLevel == toItem.MergeLevel;
+			bool isItemsValid = fromItem != null && toItem != null && fromItem != toItem && fromItem.MergeLevel == toItem.MergeLevel;
 
 			if (isItemsValid == false)
 				return false;
 
-			var hasNextMergeLevel = mergeConfig.HasNextMergeLevel(toItem.DbInfo.ID);
+			bool hasNextMergeLevel = mergeConfig.HasNextMergeLevel(toItem.DbInfo.ID);
 
 			return hasNextMergeLevel;
 		}
 
 		private void CheckIfItemCreatedFirst(int mergeLevel)
 		{
-			var currentStats = boardState.MergeStatistic.GetStatistic(mergeLevel);
+			MergeLevelStatistic? currentStats = boardState.MergeStatistic.GetStatistic(mergeLevel);
 			if (currentStats != null && currentStats.Value.CreatedCount == 1) IsMergeItemCreatedFirst.Execute(mergeLevel);
 		}
 
 		private void TryUpgradeItemToCurrentLevel(Vector2Int coord)
 		{
-			var fromItem = itemsMatrix[coord.x, coord.y];
-			var fromItemLevel = mergeConfig.GetMergeLevel(fromItem.DbInfo.ID);
-			var targetMergeLevel = boardState.CurrentMergeLevel;
-			var canUpgrade = fromItemLevel < targetMergeLevel;
+			MergeItem fromItem = itemsMatrix[coord.x, coord.y];
+			int fromItemLevel = mergeConfig.GetMergeLevel(fromItem.DbInfo.ID);
+			int targetMergeLevel = boardState.CurrentMergeLevel;
+			bool canUpgrade = fromItemLevel < targetMergeLevel;
 
 			if (canUpgrade)
 				fromItem.PlayHideAnimation(() =>
@@ -555,7 +556,7 @@
 					CreateItemAt(coord, targetMergeLevel);
 					ResubscribeMergeItems();
 
-					var item = itemsMatrix[coord.x, coord.y];
+					MergeItem item = itemsMatrix[coord.x, coord.y];
 					item.PlayMergeFX();
 					item.PlayShowAnimation(null);
 
@@ -565,7 +566,7 @@
 
 		private void DestroyItem(MergeItem item)
 		{
-			var firstItemCoord = FindItemCoords(item);
+			Vector2Int firstItemCoord = FindItemCoords(item);
 			DestroyItem(firstItemCoord);
 		}
 
@@ -578,23 +579,23 @@
 
 		private void UpdateCellsHints()
 		{
-			FindCellOrReceiver(out var cellView, out var receiver);
+			FindCellOrReceiver(out MergeBoardCellView cellView, out MergeItemReceiver receiver);
 
 			if (currentCellView == cellView || (currentCellView == null && cellView == null))
 				return;
 
 			//Debug.Log( "UpdateCellsHints : UpdateCellsHints" );
 
-			var canMergeCurrent = CanMergeToCell(currentCellView, out var currentCellIndex, out var currentCellCoord);
+			bool canMergeCurrent = CanMergeToCell(currentCellView, out int currentCellIndex, out Vector2Int currentCellCoord);
 			//var currentCellIndex = _view.GetCellIndex( _currentCellView );
 			//var currentCellCoord = CellIndexToMatrixIndex( currentCellIndex, _mergeConfig.BoardSize.x );
-			var isCurrentOtherCanBeMerged = otherCanBeMergedItemsCoords.Contains(currentCellCoord);
-			var newCurrentState = isCurrentOtherCanBeMerged ? CellInteractionState.OtherMergeable : CellInteractionState.Default;
+			bool isCurrentOtherCanBeMerged = otherCanBeMergedItemsCoords.Contains(currentCellCoord);
+			CellInteractionState newCurrentState = isCurrentOtherCanBeMerged ? CellInteractionState.OtherMergeable : CellInteractionState.Default;
 			view.SwitchToState(currentCellView, newCurrentState);
 
 
-			var canMergeNext = CanMergeToCell(cellView, out var nextCellIndex, out var nextCellCoord);
-			var newNextState = canMergeNext ? CellInteractionState.Success : CellInteractionState.Fail;
+			bool canMergeNext = CanMergeToCell(cellView, out int nextCellIndex, out Vector2Int nextCellCoord);
+			CellInteractionState newNextState = canMergeNext ? CellInteractionState.Success : CellInteractionState.Fail;
 			view.SwitchToState(cellView, newNextState);
 
 
@@ -625,21 +626,21 @@
 			cellIndex = view.GetCellIndex(cellView);
 			matrixIndex = CellIndexToMatrixIndex(cellIndex, mergeConfig.BoardSize.x);
 
-			for (var i = 0; i < otherCanBeMergedItemsCoords.Count; i++)
+			for (int i = 0; i < otherCanBeMergedItemsCoords.Count; i++)
 			{
-				var coord = otherCanBeMergedItemsCoords[i];
-				var isOther = coord != matrixIndex;
+				Vector2Int coord = otherCanBeMergedItemsCoords[i];
+				bool isOther = coord != matrixIndex;
 
 				if (isOther == false)
 					continue;
 
-				var otherCellIndex = MatrixIndexToCellIndex(coord, mergeConfig.BoardSize.x);
+				int otherCellIndex = MatrixIndexToCellIndex(coord, mergeConfig.BoardSize.x);
 				view.SwitchToState(otherCellIndex, CellInteractionState.OtherMergeable);
 			}
 
-			var attachedItem = itemsMatrix[matrixIndex.x, matrixIndex.y];
-			var hasAttachedItem = attachedItem != null;
-			var canMerge = false;
+			MergeItem attachedItem = itemsMatrix[matrixIndex.x, matrixIndex.y];
+			bool hasAttachedItem = attachedItem != null;
+			bool canMerge = false;
 
 			if (hasAttachedItem) canMerge = HasSameLevelAndExistNextLevel(draggedItem, attachedItem);
 
@@ -673,7 +674,7 @@
 		{
 			Physics.RaycastNonAlloc(camPosition, dirFromCam, hits, mergeConfig.RaycastDistance, mask);
 
-			var components = hits
+			List<TComponent> components = hits
 				.Where(hit => hit.collider != null)
 				.Select(hit => hit.collider.gameObject.GetComponent<TComponent>())
 				.ToList();
@@ -687,26 +688,26 @@
 
 		private MergeItemView ThrowRaycastAndGetNearestItem()
 		{
-			var mask = 1 << mergeConfig.MergeItemLayer;
+			int mask = 1 << mergeConfig.MergeItemLayer;
 			return ThrowRaycastAndGetNearestObject<MergeItemView>(lastTouchData.MergeCameraPosition, lastTouchData.WorldDirectionFromMergeCamera, mask);
 		}
 
 		private MergeBoardCellView ThrowRaycastAndGetNearestCell()
 		{
-			var mask = 1 << mergeConfig.MergeBoardLayer;
+			int mask = 1 << mergeConfig.MergeBoardLayer;
 			return ThrowRaycastAndGetNearestObject<MergeBoardCellView>(lastTouchData.MergeCameraPosition, lastTouchData.WorldDirectionFromMergeCamera, mask);
 		}
 
 		private MergeItemReceiver ThrowRaycastAndGetItemReceiver()
 		{
-			var mask = 1 << mergeConfig.MergeItemReceiverLayer;
+			int mask = 1 << mergeConfig.MergeItemReceiverLayer;
 			return ThrowRaycastAndGetNearestObject<MergeItemReceiver>(lastTouchData.MainCameraPosition, lastTouchData.WorldDirectionFromMainCamera, mask);
 		}
 
 		private MergeItem FindItemWithStartHit()
 		{
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
 				if (itemsMatrix[x, y] == null)
 					continue;
@@ -720,8 +721,8 @@
 
 		private MergeItem FindItemWithEndHit()
 		{
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
 				if (itemsMatrix[x, y] == null)
 					continue;
@@ -738,8 +739,8 @@
 			if (item == null)
 				throw new InvalidOperationException();
 
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
 				if (itemsMatrix[x, y] == null)
 					continue;
@@ -764,22 +765,22 @@
 		private void CreateStartMergeItems()
 		{
 			//var restoredItemsData = GetRestoredItemsData();
-			var restoredItemsData = boardState.MergeBoardRestoreData;
-			var canRestore = restoredItemsData.Count > 0;
+			IReadOnlyList<MergeBoardCellRecord> restoredItemsData = boardState.MergeBoardRestoreData;
+			bool canRestore = restoredItemsData.Count > 0;
 
 			if (canRestore)
 				restoredItemsData.ForEach(data => { CreateItemAtPosition(new Vector2Int(data.X, data.Y), data.MergeLevel); });
 			else
-				for (var i = 0; i < mergeConfig.SpawnedItemsCountByStart; i++)
+				for (int i = 0; i < mergeConfig.SpawnedItemsCountByStart; i++)
 					CreateItemAtRandomPosition(boardState.CurrentMergeLevel);
 		}
 
 		private List<MergeBoardCellRecord> GetRestoredItemsData()
 		{
-			var restoredItemsData = new List<MergeBoardCellRecord>();
+			List<MergeBoardCellRecord> restoredItemsData = new List<MergeBoardCellRecord>();
 
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
 				if (itemsMatrix[x, y] == null)
 					continue;
@@ -797,7 +798,7 @@
 
 		private void CreateItemAtRandomPosition(int mergeLevel)
 		{
-			var matrixPos = GetRandomFreePosition();
+			Vector2Int matrixPos = GetRandomFreePosition();
 			CreateItemWithFX(matrixPos, mergeLevel);
 		}
 
@@ -810,23 +811,23 @@
 		{
 			CreateItemAt(matrixPos, mergeLevel);
 
-			var item = itemsMatrix[matrixPos.x, matrixPos.y];
+			MergeItem item = itemsMatrix[matrixPos.x, matrixPos.y];
 			item.PlaySpawnFX();
 			item.PlayShowAnimation(null);
 		}
 
 		private void CreateItemAt(Vector2Int matrixPos, int mergeLevel)
 		{
-			var cellIndex = MatrixIndexToCellIndex(matrixPos, mergeConfig.BoardSize.x);
-			var worldPos = view.GetSpawnPosition(cellIndex);
-			var itemRoot = view.GetItemRoot(cellIndex);
+			int cellIndex = MatrixIndexToCellIndex(matrixPos, mergeConfig.BoardSize.x);
+			Vector3 worldPos = view.GetSpawnPosition(cellIndex);
+			Transform itemRoot = view.GetItemRoot(cellIndex);
 			itemsMatrix[matrixPos.x, matrixPos.y] = factory.Create(mergeLevel, worldPos, itemRoot);
 		}
 
 		private void DetroyMergeItems()
 		{
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
 				if (itemsMatrix[x, y] == null)
 					continue;
@@ -837,17 +838,17 @@
 
 		private void SaveRestoreData()
 		{
-			var restoreData = GetRestoredItemsData();
+			List<MergeBoardCellRecord> restoreData = GetRestoredItemsData();
 			boardState.UpdateRestoreData(restoreData);
 		}
 
 
 		private Vector2Int GetRandomFreePosition()
 		{
-			var freePositions = new List<Vector2Int>();
+			List<Vector2Int> freePositions = new List<Vector2Int>();
 
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 				if (itemsMatrix[x, y] == null)
 					freePositions.Add(new Vector2Int(x, y));
 
@@ -856,8 +857,8 @@
 
 		private bool HasFreePosition()
 		{
-			for (var x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (var y = 0; y < mergeConfig.BoardSize.y; y++)
+			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
+			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 				if (itemsMatrix[x, y] == null)
 					return true;
 
@@ -871,14 +872,14 @@
 
 		private int MatrixIndexToCellIndex(Vector2Int matrixPos, int boardWidth)
 		{
-			var cellIndex = matrixPos.y * boardWidth + matrixPos.x;
+			int cellIndex = matrixPos.y * boardWidth + matrixPos.x;
 			return cellIndex;
 		}
 
 		private Vector2Int CellIndexToMatrixIndex(int cellIndex, int boardWidth)
 		{
-			var x = cellIndex % boardWidth;
-			var y = cellIndex / boardWidth;
+			int x = cellIndex % boardWidth;
+			int y = cellIndex / boardWidth;
 			return new Vector2Int(x, y);
 		}
 	}

@@ -19,31 +19,31 @@
 
 		public MergeItem Create(ItemDbInfo itemDbInfo)
 		{
-			var dbItem = itemsLibrary.GetItem(itemDbInfo.ID);
-			var mergeLevel = mergeConfig.GetMergeLevel(itemDbInfo.ID);
-			var view = CreateView(itemDbInfo);
-			var mergeItem = new MergeItem(dbItem, view, mergeLevel);
+			DatabaseItem dbItem = itemsLibrary.GetItem(itemDbInfo.ID);
+			int mergeLevel = mergeConfig.GetMergeLevel(itemDbInfo.ID);
+			MergeItemView view = CreateView(itemDbInfo);
+			MergeItem mergeItem = new MergeItem(dbItem, view, mergeLevel);
 
 			return mergeItem;
 		}
 
 		public MergeItem Create(int mergeLevel, Vector3 worldPos, Transform viewParent)
 		{
-			var item = mergeConfig.GetMergeItem(mergeLevel);
-			var dbItem = itemsLibrary.GetItem(item.ID);
-			var view = CreateView(item);
+			ItemDbInfo item = mergeConfig.GetMergeItem(mergeLevel);
+			DatabaseItem dbItem = itemsLibrary.GetItem(item.ID);
+			MergeItemView view = CreateView(item);
 			view.SetInitialGeometry(worldPos, viewParent);
-			var mergeItem = new MergeItem(dbItem, view, mergeLevel);
+			MergeItem mergeItem = new MergeItem(dbItem, view, mergeLevel);
 
 			return mergeItem;
 		}
 
 		private MergeItemView CreateView(ItemDbInfo itemDbInfo)
 		{
-			var info = itemsLibrary.GetFactoryInfo(itemDbInfo.ID);
-			var prefab = info.ItemPrefab;
-			var viewObj = instantiator.Instantiate(prefab);
-			var view = viewObj.GetComponent<MergeItemView>();
+			ItemFactoryInfo info = itemsLibrary.GetFactoryInfo(itemDbInfo.ID);
+			MergeItemView prefab = info.ItemPrefab;
+			MergeItemView viewObj = instantiator.Instantiate(prefab);
+			MergeItemView view = viewObj.GetComponent<MergeItemView>();
 
 			return view;
 		}

@@ -27,10 +27,10 @@
 
 			if (itemName.IsNullOrWhitespace() == false)
 			{
-				var trimName = itemName.Trim();
-				var fileName = $"[{id:0000}] {trimName}";
+				string trimName = itemName.Trim();
+				string fileName = $"[{id:0000}] {trimName}";
 
-				var assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
+				string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
 				AssetDatabase.RenameAsset(assetPath, fileName);
 				AssetDatabase.SaveAssets();
 			}
