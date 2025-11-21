@@ -3,6 +3,7 @@ namespace Code.Input.Touch
 	using System.Collections;
 	using Code.Cameras;
 	using Code.Core;
+	using Code.MergeSystem;
 	using Cysharp.Threading.Tasks;
 	using UniRx;
 	using UnityEngine;
@@ -17,13 +18,14 @@ namespace Code.Input.Touch
 		private IInputManager inputManager;
 
 		private bool isTouching;
-		private float touchWorldHeight;
 		private bool waitTouch;
+		private MergeConfig mergeConfig;
 
-		public NewTouchInput(CameraController cameraController, IInputManager inputManager)
+		public NewTouchInput(CameraController cameraController, IInputManager inputManager, MergeConfig mergeConfig)
 		{
 			this.cameraController = cameraController;
 			this.inputManager = inputManager;
+			this.mergeConfig = mergeConfig;
 		}
 
 		public int TouchCount => Touch.activeTouches.Count;
@@ -49,10 +51,11 @@ namespace Code.Input.Touch
 		public ReactiveCommand<TouchData> OnTouchPositionChanged { get; } = new ReactiveCommand<TouchData>();
 
 
-		public void Construct(IInputManager inputManager, CameraController cameraController)
+		public void Construct(IInputManager inputManager, CameraController cameraController, MergeConfig mergeConfig)
 		{
 			this.inputManager = inputManager;
 			this.cameraController = cameraController;
+			this.mergeConfig = mergeConfig;
 		}
 
 		private void OnTouchPress(InputAction.CallbackContext ctx)
@@ -139,7 +142,7 @@ namespace Code.Input.Touch
 			Vector2 screenSize = ScreenSize;
 
 			Vector2 screenRelativePos = new Vector2(touchPos.x / screenSize.x, touchPos.y / screenSize.y);
-			Vector3 worldPos = cameraController.GetPointAtHeight(screenRelativePos.x, screenRelativePos.y, touchWorldHeight);
+			Vector3 worldPos = cameraController.GetPointAtHeight(screenRelativePos.x, screenRelativePos.y, mergeConfig.TouchHeight);
 			return worldPos;
 		}
 

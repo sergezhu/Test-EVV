@@ -53,7 +53,7 @@
 			inputManager = new InputManager();
 			lifetimeController.AddInitializable(inputManager);
 			
-			touchInput = new NewTouchInput(cameraController, inputManager);
+			touchInput = new NewTouchInput(cameraController, inputManager, mergeConfig);
 			lifetimeController.AddInitializable(touchInput);
 			
 			mergeItemFactory = new MergeItemFactory(mergeConfig, itemsLibrary, instantiator);

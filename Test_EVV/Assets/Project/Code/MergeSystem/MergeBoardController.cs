@@ -290,6 +290,7 @@
 				.AddTo(touchDisposable);
 
 			touchInput.OnTouchPositionChanged
+				.ThrottleFirst(TimeSpan.FromSeconds(0.02f))
 				.Where(_ => IsLocked == false)
 				.Subscribe(pos => OnTouchPositionChanged(pos))
 				.AddTo(touchDisposable);
@@ -318,11 +319,16 @@
 			if (itemViewHit != null)
 				itemViewHit.OnTouchStartHit();
 
-			Debug.Log($"[OnTouchStart] : {data.WorldDirectionFromMainCamera}, is hit : {itemViewHit != null}");
+			Debug.Log($"[OnTouchStart] : {data.WorldDirectionFromMainCamera}, is item hit : {itemViewHit != null}");
 			Debug.DrawLine(data.MainCameraPosition, data.MainCameraPosition + data.WorldDirectionFromMainCamera.normalized * mergeConfig.RaycastDistance,
 						   Color.red, 2f);
 
 			MergeItem item = FindItemWithStartHit();
+
+			FindCellOrReceiver(out MergeBoardCellView cellView, out MergeItemReceiver receiver);
+			bool isCellHit = cellView != null;
+			string cellName = isCellHit ? cellView.Name : "none";
+			Debug.Log($"[OnTouchStart] : cell : {cellName}");
 			
 			//Vector2Int? cellIndex = FindItemCoords(item);
 			//draggedItem = itemFactory.Create(item);
@@ -660,9 +666,6 @@
 		{
 			receiver = ThrowRaycastAndGetItemReceiver();
 			cellView = ThrowRaycastAndGetNearestCell();
-
-			string cellName = cellView == null ? "none" : cellView.Name;
-			Debug.Log($"FindCellOrReceiver : cellView {cellName}");
 			
 			// Priority is for CellView
 
@@ -686,7 +689,6 @@
 			else
 			{
 				receiverUnderPointer = null;
-				UpdateCellsHints();
 			}
 		}
 
@@ -697,6 +699,7 @@
 			List<TComponent> components = hits
 				.Where(hit => hit.collider != null)
 				.Select(hit => hit.collider.gameObject.GetComponent<TComponent>())
+				.Where(comp => comp != null)
 				.ToList();
 
 			TComponent firstComponent = null;
@@ -711,19 +714,19 @@
 
 		private MergeItemView ThrowRaycastAndGetNearestItem()
 		{
-			int mask = mergeConfig.MergeItemLayerMask;
+			int mask = 1 << mergeConfig.MergeItemLayer;
 			return ThrowRaycastAndGetNearestObject<MergeItemView>(lastTouchData.MainCameraPosition, lastTouchData.WorldDirectionFromMainCamera, mask);
 		}
 
 		private MergeBoardCellView ThrowRaycastAndGetNearestCell()
 		{
-			int mask = mergeConfig.MergeBoardLayerMask;
+			int mask = 1 << mergeConfig.MergeBoardLayer;
 			return ThrowRaycastAndGetNearestObject<MergeBoardCellView>(lastTouchData.MainCameraPosition, lastTouchData.WorldDirectionFromMainCamera, mask);
 		}
 
 		private MergeItemReceiver ThrowRaycastAndGetItemReceiver()
 		{
-			int mask = mergeConfig.MergeItemReceiverLayerMask;
+			int mask = 1 << mergeConfig.MergeItemReceiverLayer;
 			return ThrowRaycastAndGetNearestObject<MergeItemReceiver>(lastTouchData.MainCameraPosition, lastTouchData.WorldDirectionFromMainCamera, mask);
 		}
 

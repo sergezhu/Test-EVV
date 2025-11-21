@@ -27,8 +27,8 @@
 
 		private void OnValidate()
 		{
-			if (gameObject.layer != mergeConfig.MergeItemReceiverLayerMask)
-				gameObject.layer = mergeConfig.MergeItemReceiverLayerMask;
+			if (gameObject.layer != mergeConfig.MergeItemReceiverLayer)
+				gameObject.layer = mergeConfig.MergeItemReceiverLayer;
 		}
 
 		public void Initialize()

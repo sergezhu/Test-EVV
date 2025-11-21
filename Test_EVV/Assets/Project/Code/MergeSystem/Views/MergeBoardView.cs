@@ -42,7 +42,8 @@
 				
 				Vector3 cellPos = cellsBounds.CalculatePosition(i, j, mergeConfig.BoardSize, cellSize, cellSpace);
 				cell.transform.position = cellPos;
-				cell.transform.localScale = cellSize.x0y();
+				cell.transform.localScale = cellSize.x0y().WithY(0.2f);
+				cell.name = $"Cell_{i}_{j}";
 				
 				cells.Add(cell);
 			}
