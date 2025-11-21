@@ -19,6 +19,7 @@
 
 		public Vector3 SpawnPosition => spawnPoint.position;
 		public Transform ItemsRoot => spawnPoint;
+		public string Name => gameObject.name;
 
 		public void Initialize()
 		{

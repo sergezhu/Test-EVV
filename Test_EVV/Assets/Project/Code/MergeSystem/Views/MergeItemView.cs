@@ -73,12 +73,18 @@
 			mergeFX?.Play();
 		}
 
-		public void DoScaleInAnimation(Action completeCallback = null)
+		public void DoShowAnimation(Action completeCallback = null)
 		{
+			// TODO: implement scale in animation
+			
+			completeCallback?.Invoke();
 		}
 
-		public void DoScaleOutAnimation(Action completeCallback = null)
+		public void DoHideAnimation(Action completeCallback = null)
 		{
+			// TODO: implement scale out animation
+			
+			completeCallback?.Invoke();
 		}
 
 		public void AnimateScale(Vector3 from, Vector3 to, float duration, Ease ease, Action completeCallback = null)
@@ -108,12 +114,12 @@
 			TouchEndFlag = false;
 		}
 
-		public void SetDraggedItemLayer()
+		public void SetAsDragged()
 		{
 			gameObject.layer = mergeConfig.DraggedMergeItemLayer;
 		}
 
-		public void SetDefaultItemLayer()
+		public void SetAsDefault()
 		{
 			gameObject.layer = mergeConfig.MergeItemLayer;
 		}

@@ -38,12 +38,18 @@
 			return mergeItem;
 		}
 
+		public MergeItem Create(MergeItem referenceItem)
+		{
+			return Create(referenceItem.MergeLevel, referenceItem.Position, referenceItem.Parent);
+		}
+
 		private MergeItemView CreateView(ItemDbInfo itemDbInfo)
 		{
 			ItemFactoryInfo info = itemsLibrary.GetFactoryInfo(itemDbInfo.ID);
 			MergeItemView prefab = info.ItemPrefab;
 			MergeItemView viewObj = instantiator.Instantiate(prefab);
 			MergeItemView view = viewObj.GetComponent<MergeItemView>();
+			view.Construct(mergeConfig);
 
 			return view;
 		}

@@ -70,8 +70,8 @@ namespace Code.Input.Touch
 			if (isTouching == false || waitTouch)
 				return;
 
-			var touchPos = TouchPosition;
-			var touchData = CreateTouchData(TouchPosition);
+			Vector2 touchPos = TouchPosition;
+			TouchData touchData = CreateTouchData(TouchPosition);
 
 			OnTouchPositionChanged.Execute(touchData);
 		}
@@ -101,8 +101,8 @@ namespace Code.Input.Touch
 
 		private void StartTouchBehaviour(InputAction.CallbackContext ctx)
 		{
-			var touchPos = TouchPosition;
-			var touchData = CreateTouchData(touchPos);
+			Vector2 touchPos = TouchPosition;
+			TouchData touchData = CreateTouchData(touchPos);
 
 			OnTouchStart.Execute(touchData);
 		}
@@ -119,37 +119,33 @@ namespace Code.Input.Touch
 
 		private TouchData CreateTouchData(Vector2 touchPos)
 		{
-			var worldPosOfMainCam = TouchToWorld(touchPos, 0);
-			var worldDirOfMainCam = WorldPosToDirection(worldPosOfMainCam, 0);
+			Vector3 worldPosOfCam = TouchToWorld(touchPos);
+			Vector3 worldDirOfCam = WorldPosToDirection(worldPosOfCam);
 
-			var worldPosOfMergeCam = TouchToWorld(touchPos, 1);
-			var worldDirOfMergeCam = WorldPosToDirection(worldPosOfMergeCam, 1);
-
-			var touchData = new TouchData
+			TouchData touchData = new TouchData
 			{
 				ScreenPosition = touchPos,
-				WorldProjectionFromMergeCamera = worldPosOfMergeCam,
-				WorldDirectionFromMergeCamera = worldDirOfMergeCam,
-				WorldProjectionFromMainCamera = worldPosOfMainCam,
-				WorldDirectionFromMainCamera = worldDirOfMainCam,
-				MergeCameraPosition = cameraController.ActiveCameraPosition()
+				
+				WorldProjectionFromMainCamera = worldPosOfCam,
+				WorldDirectionFromMainCamera = worldDirOfCam,
+				MainCameraPosition = cameraController.ActiveCameraPosition()
 			};
 			return touchData;
 		}
 
 
-		private Vector3 TouchToWorld(Vector2 touchPos, int cameraIndex)
+		private Vector3 TouchToWorld(Vector2 touchPos)
 		{
 			Vector2 screenSize = ScreenSize;
 
-			var screenRelativePos = new Vector2(touchPos.x / screenSize.x, touchPos.y / screenSize.y);
-			var worldPos = cameraController.GetPointAtHeight(screenRelativePos.x, screenRelativePos.y, touchWorldHeight);
+			Vector2 screenRelativePos = new Vector2(touchPos.x / screenSize.x, touchPos.y / screenSize.y);
+			Vector3 worldPos = cameraController.GetPointAtHeight(screenRelativePos.x, screenRelativePos.y, touchWorldHeight);
 			return worldPos;
 		}
 
-		private Vector3 WorldPosToDirection(Vector3 worldPos, int cameraIndex)
+		private Vector3 WorldPosToDirection(Vector3 worldPos)
 		{
-			var camPos = cameraController.ActiveCameraPosition();
+			Vector3 camPos = cameraController.ActiveCameraPosition();
 			return worldPos - camPos;
 		}
 	}

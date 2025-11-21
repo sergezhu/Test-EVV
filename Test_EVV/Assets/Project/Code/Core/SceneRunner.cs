@@ -1,10 +1,11 @@
 ﻿namespace Code.Core
 {
+	using System;
 	using System.Collections;
 	using Code.MergeSystem;
 	using UnityEngine;
 
-	public class SceneRunner
+	public class SceneRunner : IDisposable
 	{
 		private MergeBoardController mergeBoardController;
 		private ICoroutineRunner coroutineRunner;
@@ -25,6 +26,11 @@
 			yield return new WaitForSeconds(1f);
 			
 			mergeBoardController.Activate();
+		}
+
+		public void Dispose()
+		{
+			mergeBoardController.Deactivate();
 		}
 	}
 }

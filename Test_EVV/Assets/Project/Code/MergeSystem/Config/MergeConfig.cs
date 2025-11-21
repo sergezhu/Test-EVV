@@ -22,10 +22,10 @@
 		[SerializeField] private Vector2 cellSpace;
 
 		[Header("Layers")]
-		[SerializeField] private LayerMask mergeItemLayer;
-		[SerializeField] private LayerMask mergeBoardLayer;
-		[SerializeField] private LayerMask mergeItemReceiverLayer;
-		[SerializeField] private LayerMask draggedMergeItemLayer;
+		[SerializeField] private int mergeItemLayer;
+		[SerializeField] private int mergeBoardLayer;
+		[SerializeField] private int mergeItemReceiverLayer;
+		[SerializeField] private int draggedMergeItemLayer;
 		
 		[Header("Debug")]
 		[SerializeField] private int startMergeLevel;
@@ -39,10 +39,17 @@
 		public float RaycastDistance => raycastDistance;
 		public float DraggedItemOffsetY => draggedItemOffsetY;
 		public int SpawnedItemsCountByStart => spawnedItemsCountByStart;
-		public int MergeItemLayer => mergeItemLayer.value;
-		public int MergeBoardLayer => mergeBoardLayer.value;
-		public int MergeItemReceiverLayer => mergeItemReceiverLayer.value;
-		public int DraggedMergeItemLayer => draggedMergeItemLayer.value;
+		
+		public int MergeItemLayer => mergeItemLayer;
+		public int MergeBoardLayer => mergeBoardLayer;
+		public int MergeItemReceiverLayer => mergeItemReceiverLayer;
+		public int DraggedMergeItemLayer => draggedMergeItemLayer;
+		
+		public int MergeItemLayerMask => 1 << mergeItemLayer;
+		public int MergeBoardLayerMask => 1 << mergeBoardLayer;
+		public int MergeItemReceiverLayerMask => 1 << mergeItemReceiverLayer;
+		public int DraggedMergeItemLayerMask => 1 << draggedMergeItemLayer;
+		
 		public int StartMergeLevel => startMergeLevel;
 		public MergeBoardCellView BoardCellPrefab => boardCellPrefab;
 		public Vector2 CellSize => cellSize;

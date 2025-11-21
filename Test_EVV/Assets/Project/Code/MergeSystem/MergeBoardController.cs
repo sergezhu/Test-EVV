@@ -29,7 +29,7 @@
 	{
 		private readonly BoardState boardState;
 		private readonly CompositeDisposable disposable;
-		private readonly MergeItemFactory factory;
+		private readonly MergeItemFactory itemFactory;
 
 		private readonly RaycastHit[] hits;
 		private readonly CompositeDisposable itemsDisposable;
@@ -47,14 +47,14 @@
 		private TouchData lastTouchData;
 		private MergeItemReceiver receiverUnderPointer;
 
-		public MergeBoardController(MergeBoardView view, MergeItemFactory factory, MergeConfig mergeConfig,
+		public MergeBoardController(MergeBoardView view, MergeItemFactory itemFactory, MergeConfig mergeConfig,
 									ITouchInput touchInput, BoardState boardState)
 		{
 			this.view = view;
 			this.mergeConfig = mergeConfig;
 			this.touchInput = touchInput;
 			this.boardState = boardState;
-			this.factory = factory;
+			this.itemFactory = itemFactory;
 
 			hits = new RaycastHit[10];
 			itemsMatrix = new MergeItem[this.mergeConfig.BoardSize.x, this.mergeConfig.BoardSize.y];
@@ -318,11 +318,15 @@
 			if (itemViewHit != null)
 				itemViewHit.OnTouchStartHit();
 
-			Debug.Log($"[OnTouchStart] : {data.WorldDirectionFromMergeCamera}, is hit : {itemViewHit != null}");
-			Debug.DrawLine(data.MergeCameraPosition, data.MergeCameraPosition + data.WorldDirectionFromMergeCamera.normalized * mergeConfig.RaycastDistance,
+			Debug.Log($"[OnTouchStart] : {data.WorldDirectionFromMainCamera}, is hit : {itemViewHit != null}");
+			Debug.DrawLine(data.MainCameraPosition, data.MainCameraPosition + data.WorldDirectionFromMainCamera.normalized * mergeConfig.RaycastDistance,
 						   Color.red, 2f);
 
 			MergeItem item = FindItemWithStartHit();
+			
+			//Vector2Int? cellIndex = FindItemCoords(item);
+			//draggedItem = itemFactory.Create(item);
+			
 			draggedItem = item;
 
 			if (draggedItem != null)
@@ -335,28 +339,35 @@
 
 		private void OnTouchEnd(TouchData data)
 		{
-			Debug.DrawLine(data.MergeCameraPosition, data.MergeCameraPosition + data.WorldDirectionFromMergeCamera.normalized * mergeConfig.RaycastDistance,
+			Debug.DrawLine(data.MainCameraPosition, data.MainCameraPosition + data.WorldDirectionFromMainCamera.normalized * mergeConfig.RaycastDistance,
 						   Color.red, 2f);
 
 			//var receiver = ThrowRaycastAndGetItemReceiver();
 			FindCellOrReceiver(out MergeBoardCellView cellView, out MergeItemReceiver receiver);
 
-			Debug.Log($"[OnTouchEnd] : {data.WorldDirectionFromMergeCamera}, receiver is null : {receiver == null}, cellView is null : {cellView == null}");
+			Debug.Log($"[OnTouchEnd] : {data.WorldDirectionFromMainCamera}, receiver is null : {receiver == null}, cellView is null : {cellView == null}");
 
 			if (receiver != null && draggedItem != null)
 			{
-				if (receiver.CanSwapItem(draggedItem.DbInfo) && allowedOperations.Contains(MergeOperation.EquipWithoutMerge))
+				if (receiver.CanSwapItem(draggedItem.DbInfo) && 
+					allowedOperations.Contains(MergeOperation.EquipWithoutMerge))
 				{
 					ItemDbInfo receiverItem = receiver.CurrentItem.Value;
 					int receiverItemLevel = mergeConfig.GetMergeLevel(receiverItem.ID);
-					Vector2Int draggedItemCoord = FindItemCoords(draggedItem);
+					
+					Vector2Int? draggedItemCoord = FindItemCoords(draggedItem);
+
+					if (draggedItemCoord == null)
+					{
+						throw new InvalidOperationException();
+					}
 
 					receiver.ReceiveItem(draggedItem.DbInfo, new MergeItemReceiveOptions() { CanPlayReceiveFX = true });
 					DestroyItem(draggedItem);
 
 					if (receiverItemLevel != -1)
 					{
-						CreateItemAtPosition(draggedItemCoord, receiverItemLevel);
+						CreateItemAtPosition(draggedItemCoord.Value, receiverItemLevel);
 					}
 
 					SaveRestoreData();
@@ -400,7 +411,6 @@
 					MergeItem item = itemsMatrix[matrixPos.x, matrixPos.y];
 					
 					DoMerge(draggedItem, item);
-					DestroyItem(draggedItem);
 					
 					draggedItem = null;
 				}
@@ -429,7 +439,7 @@
 				return;
 
 			//Debug.DrawLine( data.WorldProjectionFromMergeCamera, data.WorldProjectionFromMergeCamera + _view.transform.up * _mergeConfig.DraggedItemOffsetY, Color.red, 0.5f );
-			draggedItem.SetPosition(data.WorldProjectionFromMergeCamera + view.transform.up * mergeConfig.DraggedItemOffsetY);
+			draggedItem.SetPosition(data.WorldProjectionFromMainCamera + view.transform.up * mergeConfig.DraggedItemOffsetY);
 
 			UpdateCellsHints();
 		}
@@ -442,12 +452,12 @@
 			{
 				for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 				{
-					MergeItem mergeItem = itemsMatrix[x, y];
+					MergeItem item = itemsMatrix[x, y];
 
-					if (mergeItem == null)
+					if (item == null)
 						continue;
 
-					if (mergeItem != draggedItem && mergeItem.MergeLevel == mergeLevel)
+					if (item != draggedItem && item.MergeLevel == mergeLevel)
 					{
 						otherCanBeMergedItemsCoords.Add(new Vector2Int(x, y));
 					}
@@ -462,28 +472,37 @@
 			IsMergeProcessing = true;
 
 			int nextMergeLevel = toItem.MergeLevel + 1;
-			Vector2Int toItemCoord = FindItemCoords(toItem);
+			
+			Vector2Int? toItemCoord = FindItemCoords(toItem);
 
-			fromItem.PlayHideAnimation(() => { DestroyItem(fromItem); });
+			if (toItemCoord == null)
+			{
+				throw new InvalidOperationException("Target item not found");
+			}
+
+			fromItem.PlayHideAnimation(() =>
+			{
+				DestroyItem(fromItem);
+			});
 
 			toItem.PlayHideAnimation(() =>
 			{
 				DestroyItem(toItem);
-				CreateItemAt(toItemCoord, nextMergeLevel);
+				CreateItemAt(toItemCoord.Value, nextMergeLevel);
 				ResubscribeMergeItems();
 
 				boardState.AddMergedToStats(nextMergeLevel);
 
-				MergeItem item = itemsMatrix[toItemCoord.x, toItemCoord.y];
+				MergeItem item = itemsMatrix[toItemCoord.Value.x, toItemCoord.Value.y];
 				
 				item.PlayMergeFX();
 				item.PlayShowAnimation(null);
 
 				CheckIfItemCreatedFirst(nextMergeLevel);
+				SaveRestoreData();
 
 				IsMergeProcessing = false;
 
-				SaveRestoreData();
 				IsItemsMergedOnBoard.Execute(nextMergeLevel);
 			});
 		}
@@ -506,7 +525,10 @@
 
 		private bool HasSameLevelAndExistNextLevel(MergeItem fromItem, MergeItem toItem)
 		{
-			bool isItemsValid = fromItem != null && toItem != null && fromItem != toItem && fromItem.MergeLevel == toItem.MergeLevel;
+			bool isItemsValid = fromItem != null && 
+								toItem != null && 
+								fromItem != toItem && 
+								fromItem.MergeLevel == toItem.MergeLevel;
 
 			if (isItemsValid == false)
 				return false;
@@ -519,7 +541,11 @@
 		private void CheckIfItemCreatedFirst(int mergeLevel)
 		{
 			MergeLevelStatistic? currentStats = boardState.MergeStatistic.GetStatistic(mergeLevel);
-			if (currentStats != null && currentStats.Value.CreatedCount == 1) IsMergeItemCreatedFirst.Execute(mergeLevel);
+
+			if (currentStats != null && currentStats.Value.CreatedCount == 1)
+			{
+				IsMergeItemCreatedFirst.Execute(mergeLevel);
+			}
 		}
 
 		private void TryUpgradeItemToCurrentLevel(Vector2Int coord)
@@ -548,14 +574,25 @@
 
 		private void DestroyItem(MergeItem item)
 		{
-			Vector2Int firstItemCoord = FindItemCoords(item);
-			DestroyItem(firstItemCoord);
+			Vector2Int? firstItemCoord = FindItemCoords(item);
+
+			if (firstItemCoord == null)
+			{
+				throw new InvalidOperationException($"Not found item {item.DbInfo.Name}");
+			}
+			
+			DestroyItem(firstItemCoord.Value);
 		}
 
 		private void DestroyItem(Vector2Int coord)
 		{
-			itemsMatrix[coord.x, coord.y].DestroyView();
-			itemsMatrix[coord.x, coord.y].Dispose();
+			MergeItem item = itemsMatrix[coord.x, coord.y];
+			
+			Debug.Log($"DestroyItem : {coord}, merge level {item.MergeLevel + 1}");
+			
+			item.DestroyView();
+			item.Dispose();
+			
 			itemsMatrix[coord.x, coord.y] = null;
 		}
 
@@ -569,11 +606,13 @@
 			bool canMergeCurrent = CanMergeToCell(currentCellView, out int currentCellIndex, out Vector2Int currentCellCoord);
 			bool isCurrentOtherCanBeMerged = otherCanBeMergedItemsCoords.Contains(currentCellCoord);
 			CellInteractionState newCurrentState = isCurrentOtherCanBeMerged ? CellInteractionState.OtherMergeable : CellInteractionState.Default;
-			view.SwitchToState(currentCellView, newCurrentState);
+			
+			view.SetCellState(currentCellView, newCurrentState);
 
 			bool canMergeNext = CanMergeToCell(cellView, out int nextCellIndex, out Vector2Int nextCellCoord);
 			CellInteractionState newNextState = canMergeNext ? CellInteractionState.Success : CellInteractionState.Fail;
-			view.SwitchToState(cellView, newNextState);
+			
+			view.SetCellState(cellView, newNextState);
 
 			Debug.Log($"UpdateCellsHints : UpdateCellsHints, canMerge {canMergeNext}, isCurrentOther {isCurrentOtherCanBeMerged}, curState : {newCurrentState}, nextState : {newNextState}");
 
@@ -601,14 +640,18 @@
 					continue;
 
 				int otherCellIndex = MatrixIndexToCellIndex(coord, mergeConfig.BoardSize.x);
-				view.SwitchToState(otherCellIndex, CellInteractionState.OtherMergeable);
+				
+				view.SetCellState(otherCellIndex, CellInteractionState.OtherMergeable);
 			}
 
 			MergeItem attachedItem = itemsMatrix[matrixIndex.x, matrixIndex.y];
 			bool hasAttachedItem = attachedItem != null;
 			bool canMerge = false;
 
-			if (hasAttachedItem) canMerge = HasSameLevelAndExistNextLevel(draggedItem, attachedItem);
+			if (hasAttachedItem)
+			{
+				canMerge = HasSameLevelAndExistNextLevel(draggedItem, attachedItem);
+			}
 
 			return canMerge;
 		}
@@ -618,21 +661,32 @@
 			receiver = ThrowRaycastAndGetItemReceiver();
 			cellView = ThrowRaycastAndGetNearestCell();
 
+			string cellName = cellView == null ? "none" : cellView.Name;
+			Debug.Log($"FindCellOrReceiver : cellView {cellName}");
+			
+			// Priority is for CellView
+
 			if (cellView == null)
 			{
-				if (receiver != null) currentCellView = null;
-
-				if (receiver != null && receiverUnderPointer == null)
+				if (receiver != null)
 				{
-					receiverUnderPointer = receiver;
-					DisableCellsHints();
-				}
+					currentCellView = null;
 
-				if (receiver == null && receiverUnderPointer != null) receiverUnderPointer = receiver;
+					if (receiverUnderPointer == null)
+					{
+						receiverUnderPointer = receiver;
+						DisableCellsHints();
+					}
+				}
+				else
+				{
+					receiverUnderPointer = null;
+				}
 			}
 			else
 			{
 				receiverUnderPointer = null;
+				UpdateCellsHints();
 			}
 		}
 
@@ -647,39 +701,44 @@
 
 			TComponent firstComponent = null;
 
-			if (components.Count > 0) firstComponent = components[0];
+			if (components.Count > 0)
+			{
+				firstComponent = components[0];
+			}
 
 			return firstComponent;
 		}
 
 		private MergeItemView ThrowRaycastAndGetNearestItem()
 		{
-			int mask = 1 << mergeConfig.MergeItemLayer;
-			return ThrowRaycastAndGetNearestObject<MergeItemView>(lastTouchData.MergeCameraPosition, lastTouchData.WorldDirectionFromMergeCamera, mask);
+			int mask = mergeConfig.MergeItemLayerMask;
+			return ThrowRaycastAndGetNearestObject<MergeItemView>(lastTouchData.MainCameraPosition, lastTouchData.WorldDirectionFromMainCamera, mask);
 		}
 
 		private MergeBoardCellView ThrowRaycastAndGetNearestCell()
 		{
-			int mask = 1 << mergeConfig.MergeBoardLayer;
-			return ThrowRaycastAndGetNearestObject<MergeBoardCellView>(lastTouchData.MergeCameraPosition, lastTouchData.WorldDirectionFromMergeCamera, mask);
+			int mask = mergeConfig.MergeBoardLayerMask;
+			return ThrowRaycastAndGetNearestObject<MergeBoardCellView>(lastTouchData.MainCameraPosition, lastTouchData.WorldDirectionFromMainCamera, mask);
 		}
 
 		private MergeItemReceiver ThrowRaycastAndGetItemReceiver()
 		{
-			int mask = 1 << mergeConfig.MergeItemReceiverLayer;
+			int mask = mergeConfig.MergeItemReceiverLayerMask;
 			return ThrowRaycastAndGetNearestObject<MergeItemReceiver>(lastTouchData.MainCameraPosition, lastTouchData.WorldDirectionFromMainCamera, mask);
 		}
 
 		private MergeItem FindItemWithStartHit()
 		{
 			for (int x = 0; x < mergeConfig.BoardSize.x; x++)
-			for (int y = 0; y < mergeConfig.BoardSize.y; y++)
 			{
-				if (itemsMatrix[x, y] == null)
-					continue;
+				for (int y = 0; y < mergeConfig.BoardSize.y; y++)
+				{
+					if (itemsMatrix[x, y] == null)
+						continue;
 
-				if (itemsMatrix[x, y].TouchStartFlag)
-					return itemsMatrix[x, y];
+					if (itemsMatrix[x, y].TouchStartFlag)
+						return itemsMatrix[x, y];
+				}
 			}
 
 			return null;
@@ -702,7 +761,7 @@
 			return null;
 		}
 
-		private Vector2Int FindItemCoords(MergeItem item)
+		private Vector2Int? FindItemCoords(MergeItem item)
 		{
 			if (item == null)
 				throw new InvalidOperationException();
@@ -719,7 +778,7 @@
 				}
 			}
 
-			return new Vector2Int(-1, -1);
+			return null;
 		}
 
 		private void UnsubscribeTouch()
@@ -798,7 +857,9 @@
 			int cellIndex = MatrixIndexToCellIndex(matrixPos, mergeConfig.BoardSize.x);
 			Vector3 worldPos = view.GetSpawnPosition(cellIndex);
 			Transform itemRoot = view.GetItemRoot(cellIndex);
-			itemsMatrix[matrixPos.x, matrixPos.y] = factory.Create(mergeLevel, worldPos, itemRoot);
+			itemsMatrix[matrixPos.x, matrixPos.y] = itemFactory.Create(mergeLevel, worldPos, itemRoot);
+			
+			Debug.Log($"Create item at {matrixPos}, merge level {mergeLevel + 1}");
 		}
 
 		private void DetroyMergeItems()

@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 5068863743102642934}
   - component: {fileID: 9028424621851668325}
   - component: {fileID: 2241000700027048587}
+  - component: {fileID: 8722449878204128926}
   m_Layer: 5
   m_Name: PictureModel
   m_TagString: Untagged
@@ -175,6 +176,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 15415
+--- !u!114 &8722449878204128926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3106387214306277716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec4449557f4241fba1768d94ddece9a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultOrder: 0
+  draggedOrder: 10
 --- !u!1 &3923878249500035089
 GameObject:
   m_ObjectHideFlags: 0

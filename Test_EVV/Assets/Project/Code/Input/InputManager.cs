@@ -17,6 +17,8 @@ namespace Code.Input
 			actions = new InputActions();
 
 			Touch = actions.Touch;
+			
+			Touch.Enable();
 		}
 
 		public InputActions.TouchActions Touch { get; private set; }

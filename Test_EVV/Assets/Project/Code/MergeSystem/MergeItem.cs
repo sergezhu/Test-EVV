@@ -3,6 +3,7 @@
 	using System;
 	using Code.Database;
 	using UnityEngine;
+	using Utilities.Extensions;
 	using Object = UnityEngine.Object;
 
 	public class MergeItem : IDisposable
@@ -25,6 +26,8 @@
 		public bool TouchStartFlag => view.TouchStartFlag;
 		public bool TouchEndFlag => view.TouchEndFlag;
 		public ItemDbInfo DbInfo => new ItemDbInfo(dbItem.ID, dbItem.Name);
+		public Vector3 Position => view.Transform.position;
+		public Transform Parent => view.Transform.parent;
 
 		public void Dispose()
 		{
@@ -52,23 +55,29 @@
 
 		public void PlayShowAnimation(Action onComplete)
 		{
-			view.DoScaleInAnimation(onComplete);
+			view.DoShowAnimation(onComplete);
 		}
 
 		public void PlayHideAnimation(Action onComplete)
 		{
-			view.DoScaleOutAnimation(onComplete);
+			view.DoHideAnimation(onComplete);
 		}
 
 
 		public void SetDraggedItemLayer()
 		{
-			view.SetDraggedItemLayer();
+			view.SetAsDragged();
+			
+			CanvasOrderSwitcher[] canvasOrderSwitchers = view.GetComponentsInChildren<CanvasOrderSwitcher>();
+			canvasOrderSwitchers.ForEach(s => s.SetDraggedOrder());
 		}
 
 		public void SetDefaultItemLayer()
 		{
-			view.SetDefaultItemLayer();
+			view.SetAsDefault();
+
+			CanvasOrderSwitcher[] canvasOrderSwitchers = view.GetComponentsInChildren<CanvasOrderSwitcher>();
+			canvasOrderSwitchers.ForEach(s => s.SetDefaultOrder());
 		}
 
 		public void PlaySpawnFX()

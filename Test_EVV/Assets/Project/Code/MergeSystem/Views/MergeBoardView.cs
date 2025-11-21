@@ -58,12 +58,12 @@
 			return cells[cellIndex].ItemsRoot;
 		}
 
-		public void SwitchToState(int cellIndex, CellInteractionState state)
+		public void SetCellState(int cellIndex, CellInteractionState state)
 		{
 			cells[cellIndex].SwitchToState(state);
 		}
 
-		public void SwitchToState(MergeBoardCellView cell, CellInteractionState state)
+		public void SetCellState(MergeBoardCellView cell, CellInteractionState state)
 		{
 			if (cell == null)
 				return;
