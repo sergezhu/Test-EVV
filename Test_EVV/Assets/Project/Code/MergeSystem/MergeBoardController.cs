@@ -71,6 +71,8 @@
 		public bool HasEmptyCell => HasFreePosition();
 		public ReactiveCommand<int> IsMergeItemCreatedFirst { get; } = new ReactiveCommand<int>();
 		public ReactiveCommand<int> IsItemsMergedOnBoard { get; } = new ReactiveCommand<int>();
+		public ReactiveCommand<int> IsItemRollback { get; } = new ReactiveCommand<int>();
+		public ReactiveCommand<int> IsItemSpawned { get; } = new ReactiveCommand<int>();
 		public ReactiveCommand<int> IsItemEquippedWithMerge { get; } = new ReactiveCommand<int>();
 		public ReactiveCommand<int> IsItemEquippedWithoutMerge { get; } = new ReactiveCommand<int>();
 
@@ -526,6 +528,8 @@
 			{
 				fromItem.SetDefaultItemLayer();
 				fromItem.Rollback();
+				
+				IsItemRollback.Execute(fromItem.MergeLevel);
 			}
 		}
 
@@ -872,6 +876,8 @@
 			Vector3 worldPos = view.GetSpawnPosition(cellIndex);
 			Transform itemRoot = view.GetItemRoot(cellIndex);
 			itemsMatrix[matrixPos.x, matrixPos.y] = itemFactory.Create(mergeLevel, worldPos, itemRoot);
+
+			IsItemSpawned.Execute(mergeLevel);
 			
 			Debug.Log($"Create item at {matrixPos}, merge level {mergeLevel + 1}");
 		}

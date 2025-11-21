@@ -18,7 +18,6 @@
 		
 		[Space]
 		[SerializeField] private float autoSpawnDelay = 1f;
-		[SerializeField] private int autoSpawnMergeLevel = 0;
 		
 		[Header("Board and cells")]
 		[SerializeField] private MergeBoardCellView boardCellPrefab;
@@ -50,11 +49,6 @@
 		public int MergeItemReceiverLayer => mergeItemReceiverLayer;
 		public int DraggedMergeItemLayer => draggedMergeItemLayer;
 		
-		//public int MergeItemLayerMask => 1 << mergeItemLayer;
-		//public int MergeBoardLayerMask => 1 << mergeBoardLayer;
-		//public int MergeItemReceiverLayerMask => 1 << mergeItemReceiverLayer;
-		//public int DraggedMergeItemLayerMask => 1 << draggedMergeItemLayer;
-		
 		public int StartMergeLevel => startMergeLevel;
 		public MergeBoardCellView BoardCellPrefab => boardCellPrefab;
 		public Vector2 CellSize => cellSize;
@@ -62,7 +56,6 @@
 		public float TouchHeight => touchHeight;
 
 		public float AutoSpawnDelay => autoSpawnDelay;
-		public int AutoSpawnMergeLevel => autoSpawnMergeLevel;
 
 		public int GetMergeLevel(uint itemID)
 		{

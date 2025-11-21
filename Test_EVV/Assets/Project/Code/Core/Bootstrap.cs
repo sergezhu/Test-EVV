@@ -1,6 +1,7 @@
 ﻿namespace Code.Core
 {
 	using System;
+	using Code.AudioManagement;
 	using Code.Cameras;
 	using Code.Database;
 	using Code.Input;
@@ -13,6 +14,7 @@
 		[Header("Configs")]
 		[SerializeField] private MergeConfig mergeConfig;
 		[SerializeField] private ItemsLibrary itemsLibrary;
+		[SerializeField] private AudioLibrary audioLibrary;
 		
 		[Header("Views")]
 		[SerializeField] private MergeBoardView mergeBoardView;
@@ -32,6 +34,7 @@
 		private SceneRunner sceneRunner;
 		private BoardCellFactory boardCellsFactory;
 		private AutoSpawner autoSpawner;
+		private AudioController audioController;
 
 
 		private void Awake()
@@ -65,6 +68,9 @@
 			
 			autoSpawner = new AutoSpawner(mergeConfig, mergeBoardController, coroutineRunner);
 			lifetimeController.AddInitializable(autoSpawner);
+			
+			audioController = new AudioController(audioLibrary, mergeBoardController);
+			lifetimeController.AddInitializable(audioController);
 		}
 
 		private void InstallViews()
