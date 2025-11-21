@@ -15,8 +15,6 @@
 		private MergeConfig mergeConfig;
 		private BoardCellFactory cellFactory;
 
-		public bool IsLocked { get; set; }
-
 		public void Construct(MergeConfig mergeConfig, BoardCellFactory cellFactory)
 		{
 			this.mergeConfig = mergeConfig;
@@ -40,7 +38,7 @@
 			for (int i = 0; i < mergeConfig.BoardSize.x; i++)
 			for (int j = 0; j < mergeConfig.BoardSize.y; j++)
 			{
-				MergeBoardCellView cell = cellFactory.Create(cellsRoot);
+				MergeBoardCellView cell = cellFactory.CreateCellView(cellsRoot);
 				
 				Vector3 cellPos = cellsBounds.CalculatePosition(i, j, mergeConfig.BoardSize, cellSize, cellSpace);
 				cell.transform.position = cellPos;

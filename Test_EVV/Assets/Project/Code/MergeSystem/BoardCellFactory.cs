@@ -17,23 +17,26 @@
 			this.instantiator = instantiator;
 		}
 
-		public MergeBoardCellView Create(Transform parent)
+		public MergeBoardCellView CreateCellView(Transform parent)
 		{
-			return instantiator.Instantiate(mergeConfig.BoardCellPrefab, parent);
+			MergeBoardCellView cellView = instantiator.Instantiate(mergeConfig.BoardCellPrefab, parent);
+			cellView.SwitchToState(CellInteractionState.Default);
+			
+			return cellView;
 		}
 
-		public MergeItem Create(int mergeLevel, Vector3 worldPos, Transform viewParent)
+		public MergeItem CreateItem(int mergeLevel, Vector3 worldPos, Transform viewParent)
 		{
 			ItemDbInfo item = mergeConfig.GetMergeItem(mergeLevel);
 			DatabaseItem dbItem = itemsLibrary.GetItem(item.ID);
-			MergeItemView view = CreateView(item);
+			MergeItemView view = CreateItemView(item);
 			view.SetInitialGeometry(worldPos, viewParent);
 			MergeItem mergeItem = new MergeItem(dbItem, view, mergeLevel);
 
 			return mergeItem;
 		}
 
-		private MergeItemView CreateView(ItemDbInfo itemDbInfo)
+		private MergeItemView CreateItemView(ItemDbInfo itemDbInfo)
 		{
 			ItemFactoryInfo info = itemsLibrary.GetFactoryInfo(itemDbInfo.ID);
 			MergeItemView prefab = info.ItemPrefab;
