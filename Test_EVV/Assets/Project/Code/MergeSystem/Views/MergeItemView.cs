@@ -64,13 +64,13 @@
 		public void PlaySpawnFX()
 		{
 			//Debug.Log($"play spawn FX");
-			spawnFX.Play();
+			spawnFX?.Play();
 		}
 
 		public void PlayMergeFX()
 		{
 			//Debug.Log($"play merge FX");
-			mergeFX.Play();
+			mergeFX?.Play();
 		}
 
 		public void DoScaleInAnimation(Action completeCallback = null)

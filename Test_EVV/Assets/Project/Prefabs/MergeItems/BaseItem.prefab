@@ -511,8 +511,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raycastCollider: {fileID: 2892530447507463558}
   mergeLevelText: {fileID: 4142013051067105109}
-  spawnFX: {fileID: 4934520353224684878}
-  mergeFX: {fileID: 1708136736467957594}
+  spawnFX: {fileID: 0}
+  mergeFX: {fileID: 0}
 --- !u!65 &2892530447507463558
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -646,6 +646,10 @@ PrefabInstance:
     - target: {fileID: 735197201193884730, guid: 7d7f78b111e1d1049a5e375d576ff137, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1579778388323753642, guid: 7d7f78b111e1d1049a5e375d576ff137, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1579778388323753642, guid: 7d7f78b111e1d1049a5e375d576ff137, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag

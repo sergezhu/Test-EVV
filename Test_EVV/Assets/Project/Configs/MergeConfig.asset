@@ -23,10 +23,10 @@ MonoBehaviour:
     SerializationNodes: []
   itemsLibrary: {fileID: 11400000, guid: 87e615e89eccb4d408bcad8f98397cc4, type: 2}
   raycastDistance: 100
-  spawnedItemsCountByStart: 1
+  spawnedItemsCountByStart: 3
   draggedItemOffsetY: 1
   boardCellPrefab: {fileID: 7541972767706736170, guid: d4ccdc26cc5725e4b9344f88d4d63dcd, type: 3}
-  boardSize: {x: 4, y: 3}
+  boardSize: {x: 4, y: 5}
   cellSize: {x: 2, y: 2}
   cellSpace: {x: 0.25, y: 0.25}
   mergeItemLayer:
