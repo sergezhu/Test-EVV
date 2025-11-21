@@ -11,10 +11,15 @@
 	public class MergeConfig : SerializedScriptableObject
 	{
 		[SerializeField] private ItemsLibrary itemsLibrary;
-		[SerializeField] private Vector2Int boardSize;
 		[SerializeField] private float raycastDistance = 100;
 		[SerializeField] private int spawnedItemsCountByStart = 1;
 		[SerializeField] private float draggedItemOffsetY = 1;
+		
+		[Header("Board and cells")]
+		[SerializeField] private MergeBoardCellView boardCellPrefab;
+		[SerializeField] private Vector2Int boardSize;
+		[SerializeField] private Vector2 cellSize;
+		[SerializeField] private Vector2 cellSpace;
 
 		[Header("Layers")]
 		[SerializeField] private LayerMask mergeItemLayer;
@@ -39,6 +44,9 @@
 		public int MergeItemReceiverLayer => mergeItemReceiverLayer.value;
 		public int DraggedMergeItemLayer => draggedMergeItemLayer.value;
 		public int StartMergeLevel => startMergeLevel;
+		public MergeBoardCellView BoardCellPrefab => boardCellPrefab;
+		public Vector2 CellSize => cellSize;
+		public Vector2 CellSpace => cellSpace;
 
 		public int GetMergeLevel(uint itemID)
 		{

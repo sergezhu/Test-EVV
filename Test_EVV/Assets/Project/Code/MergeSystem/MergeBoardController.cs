@@ -237,6 +237,7 @@
 
 		private void PostInitialize()
 		{
+			view.CreateCells();
 			view.Show();
 
 			AllowAllOperations();

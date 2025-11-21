@@ -101,8 +101,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2710482427609368502, guid: cc68026fb33c3ac4fbb26abff64033b0,
-    type: 3}
+  m_Sprite: {fileID: 2710482427609368502, guid: cc68026fb33c3ac4fbb26abff64033b0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -158,9 +157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5417645476338063325}
   - component: {fileID: 8825251949351003799}
-  - component: {fileID: 5680714406190071834}
-  - component: {fileID: 2669618819361001352}
-  - component: {fileID: 5744069330076897344}
+  - component: {fileID: 4815226449295847343}
   m_Layer: 11
   m_Name: SelectionCellCorner
   m_TagString: Untagged
@@ -198,7 +195,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6000731082105151786}
   m_CullTransparentMesh: 1
---- !u!114 &5680714406190071834
+--- !u!114 &4815226449295847343
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -207,66 +204,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6000731082105151786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e2062062f01453ebac1e965c3a678ea, type: 3}
+  m_Script: {fileID: 11500000, guid: deb184e7d4d147ae9853a15b3cd0ca83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _successHitHintLayer: {fileID: 8545503035388843823}
-  _failHitHintLayer: {fileID: 4358504587634234714}
-  _otherMergeableHintLayer: {fileID: 854265114401473055}
-  _fadeInAnimation: {fileID: 2669618819361001352}
-  _fadeOutAnimation: {fileID: 5744069330076897344}
---- !u!114 &2669618819361001352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6000731082105151786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 781c773d689fd3b4d9d7c1b7ad0e7417, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _name: fade_in
-  _properties:
-    _duration: 0.25
-    _ease: 9
-    _easeOvershoot: 1.7
-  _playOnEnable: 0
-  _loop: 0
-  _loopProperties:
-    _loops: -1
-    _type: 1
-    _delays: 0
-  _scalingTransform: {fileID: 5417645476338063325}
-  _originScale: {x: 0, y: 0, z: 0}
-  _targetScale: {x: 1.2, y: 1.2, z: 1.2}
---- !u!114 &5744069330076897344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6000731082105151786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 781c773d689fd3b4d9d7c1b7ad0e7417, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _name: fade_out
-  _properties:
-    _duration: 0.02
-    _ease: 1
-    _easeOvershoot: 1.7
-  _playOnEnable: 0
-  _loop: 0
-  _loopProperties:
-    _loops: -1
-    _type: 1
-    _delays: 0
-  _scalingTransform: {fileID: 5417645476338063325}
-  _originScale: {x: 1.2, y: 1.2, z: 1.2}
-  _targetScale: {x: 0, y: 0, z: 0}
+  successHitHintLayer: {fileID: 8545503035388843823}
+  failHitHintLayer: {fileID: 4358504587634234714}
+  otherMergeableHintLayer: {fileID: 854265114401473055}
 --- !u!1 &6865154038556327950
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,8 +275,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2710482427609368502, guid: cc68026fb33c3ac4fbb26abff64033b0,
-    type: 3}
+  m_Sprite: {fileID: 2710482427609368502, guid: cc68026fb33c3ac4fbb26abff64033b0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -408,8 +350,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2710482427609368502, guid: cc68026fb33c3ac4fbb26abff64033b0,
-    type: 3}
+  m_Sprite: {fileID: 2710482427609368502, guid: cc68026fb33c3ac4fbb26abff64033b0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

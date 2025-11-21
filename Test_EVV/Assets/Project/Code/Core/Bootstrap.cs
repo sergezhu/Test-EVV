@@ -19,8 +19,9 @@
 		
 		[Header("Services")]
 		[SerializeField] private CameraController cameraController;
+		[SerializeField] private CoroutineRunner coroutineRunner;
 
-
+		
 		private LifetimeController lifetimeController;
 		private IInstantiator instantiator;
 		private InputManager inputManager;
@@ -28,6 +29,8 @@
 		private MergeItemFactory mergeItemFactory;
 		private MergeBoardController mergeBoardController;
 		private BoardState boardState;
+		private SceneRunner sceneRunner;
+		private BoardCellFactory boardCellsFactory;
 
 
 		private void Awake()
@@ -35,6 +38,18 @@
 			lifetimeController = new LifetimeController();
 			instantiator = new Instantiator();
 			
+			InstallViews();
+			InstallServices();
+
+			// Initialize all IInitializable in orders as they was added
+			lifetimeController.Initialize();
+			
+			sceneRunner = new SceneRunner(mergeBoardController, coroutineRunner);
+			sceneRunner.Run();
+		}
+
+		private void InstallServices()
+		{
 			inputManager = new InputManager();
 			lifetimeController.AddInitializable(inputManager);
 			
@@ -46,9 +61,14 @@
 			
 			mergeBoardController = new MergeBoardController(mergeBoardView, mergeItemFactory, mergeConfig, touchInput, boardState);
 			lifetimeController.AddInitializable(mergeBoardController);
+		}
+
+		private void InstallViews()
+		{
+			boardCellsFactory = new BoardCellFactory(mergeConfig, itemsLibrary, instantiator);
 			
-			// Initialize all IInitializable in orders as they was added
-			lifetimeController.Initialize();
+			mergeBoardView.Construct(mergeConfig, boardCellsFactory);
+			lifetimeController.AddInitializable(mergeBoardView);
 		}
 	}
 }
