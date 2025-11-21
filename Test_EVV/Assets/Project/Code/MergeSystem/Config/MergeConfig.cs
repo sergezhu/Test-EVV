@@ -12,9 +12,13 @@
 	{
 		[SerializeField] private ItemsLibrary itemsLibrary;
 		[SerializeField] private float raycastDistance = 100;
-		[SerializeField] private int spawnedItemsCountByStart = 1;
+		[SerializeField] private int spawnedItemsCountByStart = 2;
 		[SerializeField] private float draggedItemOffsetY = 1;
 		[SerializeField] private float touchHeight = 1;
+		
+		[Space]
+		[SerializeField] private float autoSpawnDelay = 1f;
+		[SerializeField] private int autoSpawnMergeLevel = 0;
 		
 		[Header("Board and cells")]
 		[SerializeField] private MergeBoardCellView boardCellPrefab;
@@ -56,6 +60,9 @@
 		public Vector2 CellSize => cellSize;
 		public Vector2 CellSpace => cellSpace;
 		public float TouchHeight => touchHeight;
+
+		public float AutoSpawnDelay => autoSpawnDelay;
+		public int AutoSpawnMergeLevel => autoSpawnMergeLevel;
 
 		public int GetMergeLevel(uint itemID)
 		{

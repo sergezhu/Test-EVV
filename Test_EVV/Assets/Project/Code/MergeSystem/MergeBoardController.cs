@@ -88,6 +88,13 @@
 		{
 			CleanUp();
 		}
+		
+		public void SpawnRandomItem()
+		{
+			int mergeLevel = boardState.CurrentMergeLevel;
+			CreateItemAtRandomPosition(mergeLevel);
+			CheckIfItemCreatedFirst(mergeLevel);
+		}
 
 
 		public void BuyItem()
@@ -544,6 +551,10 @@
 			return hasNextMergeLevel;
 		}
 
+		/// <summary>
+		/// Checks if item with merge level created first
+		/// </summary>
+		/// <param name="mergeLevel"></param>
 		private void CheckIfItemCreatedFirst(int mergeLevel)
 		{
 			MergeLevelStatistic? currentStats = boardState.MergeStatistic.GetStatistic(mergeLevel);

@@ -31,6 +31,7 @@
 		private BoardState boardState;
 		private SceneRunner sceneRunner;
 		private BoardCellFactory boardCellsFactory;
+		private AutoSpawner autoSpawner;
 
 
 		private void Awake()
@@ -61,6 +62,9 @@
 			
 			mergeBoardController = new MergeBoardController(mergeBoardView, mergeItemFactory, mergeConfig, touchInput, boardState);
 			lifetimeController.AddInitializable(mergeBoardController);
+			
+			autoSpawner = new AutoSpawner(mergeConfig, mergeBoardController, coroutineRunner);
+			lifetimeController.AddInitializable(autoSpawner);
 		}
 
 		private void InstallViews()
