@@ -22,7 +22,6 @@
 			this.boardController = boardController;
 
 			Subscribe();
-			
 			SoundOff();
 		}
 
